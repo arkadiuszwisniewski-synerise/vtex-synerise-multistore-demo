@@ -741,6 +741,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
 .wire-r { padding-left: 12px; color: var(--grey-400); }
 .wire-r .ok { color: #9ff07a; }
 .wire-r .err { color: #ff8a85; }
+.wire-note { color: var(--grey-500); }
 
 /* ---- storefront --------------------------------------------------------- */
 .shop { border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; background: #fff; height: clamp(360px, 66vh, 760px); display: flex; flex-direction: column; }
@@ -765,14 +766,14 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
 .ac-item:hover { background: var(--grey-100); }
 .ac-item .tile { width: 30px; height: 30px; font-size: 9px; border-radius: 6px; }
 .ac-item em { font-style: normal; color: var(--color-text-muted); margin-left: auto; font-size: var(--fs-caption); }
-.ac-sugg { padding: 4px 8px 8px; color: var(--color-text-muted); font-size: var(--fs-caption); }
-.ac-sugg b { color: var(--color-text-primary); cursor: pointer; }
 
 .shop-sum { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px 0; flex-wrap: wrap; }
 .shop-sum .n { font-size: var(--fs-subhead); font-weight: 600; }
 .shop-sum .of { color: var(--color-text-muted); }
 .shop-sum .of b { color: var(--color-text-primary); }
 .shop-sum .sugg { color: var(--color-text-muted); }
+.shop-sum .sugg-go { cursor: pointer; text-decoration: underline; }
+.shop-sum [data-go] { margin-left: auto; }
 .facets { display: flex; flex-direction: column; gap: 8px; padding: 10px 16px; }
 .facet-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); align-items: center; gap: 8px; }
 /* values stay on one line; whatever does not fit fades out at the right edge */
@@ -833,7 +834,27 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
 .cat-other      { background: var(--grey-200); }
 
 .empty { padding: 30px 16px; color: var(--color-text-muted); }
+/* inside a product grid, messages take the whole row */
+.grid-p > .empty, .grid-p > .err-box, .rail-items > .empty, .rail-items > .err-box { grid-column: 1 / -1; }
 .err-box { margin: 10px 16px; padding: 10px 14px; border-radius: 10px; background: #fff0ef; color: #a1160f; font-size: var(--fs-caption); }
+
+/* ---- category page (base + special) ------------------------------------ */
+.cat-nav { flex: 1; display: flex; gap: 4px; flex-wrap: nowrap; overflow: hidden; min-width: 0; }
+.cat-tab { font: inherit; font-size: var(--fs-caption); font-weight: 600; white-space: nowrap; padding: 8px 12px; border-radius: 999px; border: 0; background: none; color: var(--color-text-body); cursor: pointer; }
+.cat-tab:hover { background: var(--grey-100); }
+.cat-tab.is-on { background: var(--grey-900); color: #fff; }
+.shop-body { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+.shop-body .grid-p { flex: none; overflow: visible; }
+.picked { margin: 2px 16px 6px; border-radius: 14px; background: color-mix(in srgb, var(--color-accent) 28%, #fff); }
+.picked-h { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px 0; font-size: var(--fs-caption); }
+.picked-h b { font-size: var(--fs-body); }
+.picked-h span { color: var(--color-text-muted); }
+.picked .grid-p { padding: 6px 6px 8px; }
+.plp-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 16px 4px; font-size: var(--fs-caption); color: var(--color-text-muted); }
+.plp-bar b { color: var(--color-text-primary); }
+.plp-bar .excl { color: #1f8a4c; font-weight: 600; }
+.plp-bar select { font: inherit; font-size: var(--fs-caption); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--color-border); background: #fff; }
+.plp-more { display: flex; justify-content: center; padding: 0 16px 16px; }
 
 /* ---- stores slide ------------------------------------------------------ */
 .st-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
@@ -904,6 +925,25 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
 .sdk pre { margin: 0; padding: 12px 14px; border-radius: 10px; background: #161b25; font-size: 12px; line-height: 1.5; color: var(--grey-400); white-space: pre-wrap; }
 .sdk pre mark { background: none; color: var(--color-accent); }
 .stat-value { white-space: nowrap; }
+
+/* ---- 14–15 · summary --------------------------------------------------- */
+.sum { gap: 28px; align-items: start; }
+.sum-col { min-width: 0; }
+.sum-h { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; color: var(--color-text-muted); font-size: var(--fs-caption); }
+.dim-tag.tag-warn { background: var(--yellow-600); color: var(--grey-900); }
+.dim-tag.tag-ok { background: var(--color-accent); color: var(--grey-900); }
+.cfg { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0 18px; margin: 0; font-size: clamp(13px, .9vw, 17px); line-height: 1.4; }
+.cfg dt, .cfg dd { margin: 0; padding: 9px 0; border-top: 1px solid var(--color-border); }
+.cfg dt { font-weight: 600; color: var(--color-text-primary); white-space: nowrap; }
+.cfg dd { color: var(--color-text-body); }
+.cfg dd span { color: var(--color-text-subtle); }
+.cfg code, .notes code { font-size: .88em; background: var(--grey-100); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; font-size: clamp(13px, .9vw, 17px); line-height: 1.4; }
+.notes li { position: relative; padding: 9px 0 9px 26px; border-top: 1px solid var(--color-border); color: var(--color-text-muted); }
+.notes li b { color: var(--color-text-primary); font-weight: 600; }
+.notes li::before { content: ''; position: absolute; left: 4px; top: 15px; width: 10px; height: 10px; border-radius: 50%; }
+.notes-warn li::before { background: var(--yellow-600); }
+.notes-ok li::before { background: var(--green-600); }
 
 </style>
 <script>
@@ -999,7 +1039,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">October 2026</span>
-    <span class="slide-footer-r">01 / 11</span>
+    <span class="slide-footer-r">01 / 15</span>
   </div>
 </section>
 
@@ -1083,7 +1123,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Same SKUs, same assortment, same prices within a trade policy</span>
-    <span class="slide-footer-r">02 / 11</span>
+    <span class="slide-footer-r">02 / 15</span>
   </div>
 </section>
 
@@ -1152,7 +1192,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
           <tr><td>Sync complexity</td><td>none</td><td class="is-pick">fan-in, one writer</td><td>low, one per store</td></tr>
           <tr><td>Web recommendations</td><td class="warn">over-fetch + filter</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
           <tr><td>Email</td><td class="bad">API workarounds</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
-          <tr><td>Synerise Search / PLP</td><td class="bad">blind to stock</td><td class="ok is-pick">filter + facets</td><td class="bad">not in Search yet</td></tr>
+          <tr><td>Synerise Search / PLP</td><td class="warn">over-fetch + filter</td><td class="ok is-pick">filter + facets</td><td class="bad">not in Search yet</td></tr>
         </tbody>
       </table>
       <p class="body reveal"><b>Working direction:</b> B now, C as the target once Search reads supplemental catalogs. This deck runs on B.</p>
@@ -1160,12 +1200,12 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Attribute sync from VTEX is taken as given here: the deck is about using it</span>
-    <span class="slide-footer-r">03 / 11</span>
+    <span class="slide-footer-r">03 / 15</span>
   </div>
 </section>
 
 <!-- 04 — The solution: one item, three kinds of attribute -->
-<section class="slide" data-slide="4" aria-hidden="true" data-section="solution">
+<section class="slide" data-slide="4" aria-hidden="true">
   <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
 <g>
@@ -1245,7 +1285,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">A real row of the demo catalog · not in Köln, not in Napoli</span>
-    <span class="slide-footer-r">04 / 11</span>
+    <span class="slide-footer-r">04 / 15</span>
   </div>
 </section>
 
@@ -1309,7 +1349,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
         <div class="pipe-arrow"><span></span></div>
         <div class="pipe-node pipe-hl"><span class="eyebrow">Index per language</span><b>havenmart-es</b><span>searches <code>name_es</code>, <code>description_es</code></span></div>
         <div class="pipe-arrow"><span></span></div>
-        <div class="pipe-node pipe-hl"><span class="eyebrow">IQL filter</span><b><code>availability == "ST-ES-MAD-01"</code></b><span>== on an array means &ldquo;contains&rdquo;</span></div>
+        <div class="pipe-node pipe-hl"><span class="eyebrow">IQL filter</span><b><code>availability == "ST-ES-MAD-01"</code></b><span>== on an array matches one whole element</span></div>
         <div class="pipe-arrow"><span></span></div>
         <div class="pipe-node"><span class="eyebrow">Result</span><b>ranked, faceted, in stock</b></div>
       </div>
@@ -1319,7 +1359,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">10 search indices per workspace · a brand-country with two languages uses two</span>
-    <span class="slide-footer-r">05 / 11</span>
+    <span class="slide-footer-r">05 / 15</span>
   </div>
 </section>
 
@@ -1389,7 +1429,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">One campaign per model, not per language · displayAttribute does the translation</span>
-    <span class="slide-footer-r">06 / 11</span>
+    <span class="slide-footer-r">06 / 15</span>
   </div>
 </section>
 
@@ -1461,7 +1501,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">This deck is the storefront: the same tracking code runs in it</span>
-    <span class="slide-footer-r">07 / 11</span>
+    <span class="slide-footer-r">07 / 15</span>
   </div>
 </section>
 
@@ -1519,7 +1559,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
     <div class="slide-content slide-content-wide stack-l">
       <div class="stack-s">
         <h2 class="title reveal">One chain, twenty stores, one workspace.</h2>
-        <p class="body-l text-muted reveal">Havenmart: the demo catalog behind the next three slides.</p>
+        <p class="body-l text-muted reveal">Havenmart: the demo catalog behind the next five slides.</p>
       </div>
       <div class="row-stats reveal">
         <div class="stat"><div class="stat-value">1,000</div><div class="stat-label">SKUs, one catalog</div></div>
@@ -1532,7 +1572,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Fictional retailer, real Synerise workspace · every call that follows is live</span>
-    <span class="slide-footer-r">08 / 11</span>
+    <span class="slide-footer-r">08 / 15</span>
   </div>
 </section>
 
@@ -1593,12 +1633,134 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Change the store or the language: same query, another shelf</span>
-    <span class="slide-footer-r">09 / 11</span>
+    <span class="slide-footer-r">09 / 15</span>
   </div>
 </section>
 
-<!-- 10 — LIVE: one query, twenty shelves -->
+<!-- 10 — LIVE: category page (base) -->
 <section class="slide slide-live" data-slide="10" aria-hidden="true">
+  <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
+<g>
+	<path d="M23.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6C1,6.7,2.9,4.2,5.8,2.4
+		c1.7-1,3.6-1.7,5.6-2.1C12.7,0.1,14,0,15.3,0c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C6,39.6,20.4,39.5,23.3,39.4z"/>
+	<path d="M277.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6c0.7-3.4,2.6-5.9,5.5-7.7
+		c1.7-1,3.6-1.7,5.6-2.1c1.3-0.2,2.6-0.4,3.9-0.4c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C259.9,39.6,274.3,39.5,277.3,39.4z"
+		/>
+	<path d="M140.2,43c0,0.5,0,1.1-0.1,1.6c-0.3,2-1.9,3.4-3.9,3.5c-2,0.1-3.8-1.2-4.2-3.2c-0.1-0.6-0.2-1.2-0.2-1.9
+		c0-7.4,0-14.8,0-22.3c0-1,0-2-0.2-3c-1.2-5.1-4.4-8.2-9.5-9.3c-4.3-1-8.2,0.2-11.4,3.2c-2.4,2.2-3.6,5.1-3.6,8.3
+		c0,1.9,0,17.1,0,22.8c0,0.4,0,0.9,0,1.3c0,2.2-2,3.9-4.1,3.9c-2.3,0-4.1-1.6-4.2-3.9c0-0.4,0-0.8,0-1.1c0-7.5,0.1-14.9,0-22.4
+		c-0.2-10.7,7.9-19,17.5-20.3c7.7-1.1,14.3,1.3,19.4,7.2c3.2,3.6,4.6,8,4.6,12.8C140.2,23.9,140.2,39,140.2,43z"/>
+	<path d="M182.7,0c0.7,0,1.3,0.1,2,0.4c1.6,0.8,2.6,2.5,2.4,4.2c-0.3,1.9-1.8,3.3-3.7,3.5c-0.4,0-7.6,0-10.8,0
+		c-3.3,0-6.2,1.1-8.6,3.4c-2.4,2.3-3.7,5.1-3.8,8.4c-0.1,2.8-0.1,5.5,0,8.3c0.2,6.7,5.4,10.8,10.3,11.5c0.9,0.1,1.9,0.2,2.9,0.2
+		c2.9,0,9.5,0,9.9,0c2.2,0,3.8,1.9,3.8,4c0,2-1.6,3.9-3.7,4.1c-0.3,0-7.8,0.1-11.2,0c-6.6-0.2-12-2.8-16.2-8
+		c-2.8-3.5-4.1-7.5-4.2-12c0-2.5,0-5.1,0-7.6c-0.1-8.9,5.5-16.2,13.4-19.2c2.2-0.8,4.5-1.3,6.9-1.3C173.7,0,180.8,0,182.7,0z"/>
+	<path d="M329.8,0c0.8,0,1.5,0.1,2.2,0.5c1.6,0.9,2.5,2.6,2.1,4.5c-0.3,1.6-1.8,2.9-3.5,3.1c-0.5,0-1,0-1.4,0c-3.1,0-6.2,0-9.3,0
+		c-3,0-5.8,0.9-8.1,2.9c-2.8,2.3-4.3,5.3-4.3,9c0,2.7,0,5.4,0,8c0,5.5,4.1,10.6,10.2,11.6c0.9,0.2,1.9,0.2,2.9,0.2
+		c2.9,0,9.6,0,10.1,0c2.1,0.2,3.7,1.9,3.7,4c0,2.1-1.7,3.8-3.7,4.1c-0.2,0-0.4,0-0.6,0c-3.6,0-7.3,0.1-10.9,0
+		c-7.6-0.3-13.4-3.7-17.4-10.2c-1.8-2.9-2.6-6.1-2.6-9.6c0-2.7,0-5.4,0-8c0.1-7.5,3.5-13.2,9.8-17.1c3.2-2,6.7-3,10.5-3
+		C320.9,0,327.9,0,329.8,0z"/>
+	<path d="M67,18.1c0,0,17.3-16.8,17.7-17.1c1.4-1.1,3.2-1.3,4.7-0.4c1.6,0.9,2.2,2.3,2,4.1c-0.1,0.8-0.4,1.5-0.9,2.1
+		C90.2,7.1,72.6,24,72.4,24.3c-0.7,0.7-1.1,1.6-1.1,2.6c0,0.4,0,16.8,0,17.2c-0.2,1.7-1,2.9-2.6,3.5c-1.6,0.7-3.2,0.4-4.6-0.7
+		c-0.6-0.5-1-1.2-1.1-2c-0.1-0.6-0.1-1.2-0.1-1.9c0-4.8,0-15.2,0-15.5c0.1-1.6-0.5-2.7-1.6-3.8C55.7,18.6,44.1,7.3,43.7,6.9
+		c-1.4-1.5-1.5-3.8-0.2-5.4c1.3-1.6,3.7-2,5.4-0.9C50,1.3,67,18.1,67,18.1z"/>
+	<path d="M199.1,18c0-1.8,0.2-3.6,0.6-5.4c1.2-4.5,3.8-7.8,7.9-9.9c2.4-1.3,5.1-2,7.8-2.4c2.8-0.4,5.6-0.3,8.5-0.3
+		c1.3,0,2.4,0.6,3.2,1.6c1.2,1.4,1.2,3.3,0.1,4.8c-0.9,1.1-2.1,1.7-3.5,1.7c-1.5,0-3.1,0-4.6,0c-1.7,0-3.4,0.3-5.1,0.9
+		c-0.9,0.3-1.7,0.7-2.5,1.1c-2.4,1.4-3.7,3.6-4,6.3c-0.1,0.9-0.1,1.8-0.1,2.7c0,7.9,0,15.9,0,23.8c0,0.6,0,1.2-0.1,1.9
+		c-0.2,1.2-0.8,2-1.8,2.6c-1.2,0.7-2.5,0.8-3.9,0.4c-1.5-0.5-2.3-1.6-2.5-3.2c0-0.5,0-1,0-1.4C199.1,38.7,199.1,22,199.1,18z"/>
+	<path d="M232.4,19.4c0-0.6,0-1.3,0.2-1.8c0.5-1.9,2.2-3,4.2-2.9c2,0.1,3.6,1.5,3.9,3.4c0.1,0.5,0.1,1,0.1,1.4c0,7.9,0,15.9,0,23.8
+		c0,0.2,0,0.5,0,0.7c-0.1,1.7-0.9,2.9-2.4,3.6c-1.6,0.7-3.1,0.5-4.5-0.5c-0.9-0.7-1.3-1.6-1.4-2.7c0-0.4,0-0.9,0-1.3
+		C232.4,39.2,232.4,23.4,232.4,19.4z"/>
+	<path d="M330.4,19.6c1.6,0.1,2.8,1,3.4,2.5c1.1,2.5-0.6,5.3-3.4,5.6c-0.2,0-0.4,0-0.6,0c-2.1,0-4.1,0-6.2,0c-0.8,0-1.5-0.2-2.2-0.6
+		c-1.6-0.9-2.3-2.5-2-4.2c0.3-1.8,1.7-3.1,3.5-3.3c0.4,0,0.8,0,1.1-0.1C325,19.5,329.2,19.5,330.4,19.6z"/>
+	<path d="M182.7,19.5c0.6,0,1.2,0.1,1.7,0.3c1.8,0.7,2.8,2.4,2.6,4.3c-0.2,1.8-1.7,3.3-3.6,3.5c-0.2,0-4.7,0-6.7,0
+		c-0.5,0-1.1-0.1-1.5-0.3c-1.9-0.6-3-2.4-2.8-4.3c0.2-1.8,1.8-3.3,3.7-3.5C177.2,19.5,181.7,19.5,182.7,19.5z"/>
+</g>
+</svg><span class="chrome-crumb">VTEX × Synerise · feed architecture</span></div><div class="slide-chrome-tr">03 · Live · Category page</div></div>
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="plp"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">A category page is a search with no query: /list on the same index, the category and the store as filters</span>
+    <span class="slide-footer-r">10 / 15</span>
+  </div>
+</section>
+
+<!-- 11 — LIVE: category page, special implementation -->
+<section class="slide slide-live" data-slide="11" aria-hidden="true">
+  <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
+<g>
+	<path d="M23.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6C1,6.7,2.9,4.2,5.8,2.4
+		c1.7-1,3.6-1.7,5.6-2.1C12.7,0.1,14,0,15.3,0c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C6,39.6,20.4,39.5,23.3,39.4z"/>
+	<path d="M277.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6c0.7-3.4,2.6-5.9,5.5-7.7
+		c1.7-1,3.6-1.7,5.6-2.1c1.3-0.2,2.6-0.4,3.9-0.4c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C259.9,39.6,274.3,39.5,277.3,39.4z"
+		/>
+	<path d="M140.2,43c0,0.5,0,1.1-0.1,1.6c-0.3,2-1.9,3.4-3.9,3.5c-2,0.1-3.8-1.2-4.2-3.2c-0.1-0.6-0.2-1.2-0.2-1.9
+		c0-7.4,0-14.8,0-22.3c0-1,0-2-0.2-3c-1.2-5.1-4.4-8.2-9.5-9.3c-4.3-1-8.2,0.2-11.4,3.2c-2.4,2.2-3.6,5.1-3.6,8.3
+		c0,1.9,0,17.1,0,22.8c0,0.4,0,0.9,0,1.3c0,2.2-2,3.9-4.1,3.9c-2.3,0-4.1-1.6-4.2-3.9c0-0.4,0-0.8,0-1.1c0-7.5,0.1-14.9,0-22.4
+		c-0.2-10.7,7.9-19,17.5-20.3c7.7-1.1,14.3,1.3,19.4,7.2c3.2,3.6,4.6,8,4.6,12.8C140.2,23.9,140.2,39,140.2,43z"/>
+	<path d="M182.7,0c0.7,0,1.3,0.1,2,0.4c1.6,0.8,2.6,2.5,2.4,4.2c-0.3,1.9-1.8,3.3-3.7,3.5c-0.4,0-7.6,0-10.8,0
+		c-3.3,0-6.2,1.1-8.6,3.4c-2.4,2.3-3.7,5.1-3.8,8.4c-0.1,2.8-0.1,5.5,0,8.3c0.2,6.7,5.4,10.8,10.3,11.5c0.9,0.1,1.9,0.2,2.9,0.2
+		c2.9,0,9.5,0,9.9,0c2.2,0,3.8,1.9,3.8,4c0,2-1.6,3.9-3.7,4.1c-0.3,0-7.8,0.1-11.2,0c-6.6-0.2-12-2.8-16.2-8
+		c-2.8-3.5-4.1-7.5-4.2-12c0-2.5,0-5.1,0-7.6c-0.1-8.9,5.5-16.2,13.4-19.2c2.2-0.8,4.5-1.3,6.9-1.3C173.7,0,180.8,0,182.7,0z"/>
+	<path d="M329.8,0c0.8,0,1.5,0.1,2.2,0.5c1.6,0.9,2.5,2.6,2.1,4.5c-0.3,1.6-1.8,2.9-3.5,3.1c-0.5,0-1,0-1.4,0c-3.1,0-6.2,0-9.3,0
+		c-3,0-5.8,0.9-8.1,2.9c-2.8,2.3-4.3,5.3-4.3,9c0,2.7,0,5.4,0,8c0,5.5,4.1,10.6,10.2,11.6c0.9,0.2,1.9,0.2,2.9,0.2
+		c2.9,0,9.6,0,10.1,0c2.1,0.2,3.7,1.9,3.7,4c0,2.1-1.7,3.8-3.7,4.1c-0.2,0-0.4,0-0.6,0c-3.6,0-7.3,0.1-10.9,0
+		c-7.6-0.3-13.4-3.7-17.4-10.2c-1.8-2.9-2.6-6.1-2.6-9.6c0-2.7,0-5.4,0-8c0.1-7.5,3.5-13.2,9.8-17.1c3.2-2,6.7-3,10.5-3
+		C320.9,0,327.9,0,329.8,0z"/>
+	<path d="M67,18.1c0,0,17.3-16.8,17.7-17.1c1.4-1.1,3.2-1.3,4.7-0.4c1.6,0.9,2.2,2.3,2,4.1c-0.1,0.8-0.4,1.5-0.9,2.1
+		C90.2,7.1,72.6,24,72.4,24.3c-0.7,0.7-1.1,1.6-1.1,2.6c0,0.4,0,16.8,0,17.2c-0.2,1.7-1,2.9-2.6,3.5c-1.6,0.7-3.2,0.4-4.6-0.7
+		c-0.6-0.5-1-1.2-1.1-2c-0.1-0.6-0.1-1.2-0.1-1.9c0-4.8,0-15.2,0-15.5c0.1-1.6-0.5-2.7-1.6-3.8C55.7,18.6,44.1,7.3,43.7,6.9
+		c-1.4-1.5-1.5-3.8-0.2-5.4c1.3-1.6,3.7-2,5.4-0.9C50,1.3,67,18.1,67,18.1z"/>
+	<path d="M199.1,18c0-1.8,0.2-3.6,0.6-5.4c1.2-4.5,3.8-7.8,7.9-9.9c2.4-1.3,5.1-2,7.8-2.4c2.8-0.4,5.6-0.3,8.5-0.3
+		c1.3,0,2.4,0.6,3.2,1.6c1.2,1.4,1.2,3.3,0.1,4.8c-0.9,1.1-2.1,1.7-3.5,1.7c-1.5,0-3.1,0-4.6,0c-1.7,0-3.4,0.3-5.1,0.9
+		c-0.9,0.3-1.7,0.7-2.5,1.1c-2.4,1.4-3.7,3.6-4,6.3c-0.1,0.9-0.1,1.8-0.1,2.7c0,7.9,0,15.9,0,23.8c0,0.6,0,1.2-0.1,1.9
+		c-0.2,1.2-0.8,2-1.8,2.6c-1.2,0.7-2.5,0.8-3.9,0.4c-1.5-0.5-2.3-1.6-2.5-3.2c0-0.5,0-1,0-1.4C199.1,38.7,199.1,22,199.1,18z"/>
+	<path d="M232.4,19.4c0-0.6,0-1.3,0.2-1.8c0.5-1.9,2.2-3,4.2-2.9c2,0.1,3.6,1.5,3.9,3.4c0.1,0.5,0.1,1,0.1,1.4c0,7.9,0,15.9,0,23.8
+		c0,0.2,0,0.5,0,0.7c-0.1,1.7-0.9,2.9-2.4,3.6c-1.6,0.7-3.1,0.5-4.5-0.5c-0.9-0.7-1.3-1.6-1.4-2.7c0-0.4,0-0.9,0-1.3
+		C232.4,39.2,232.4,23.4,232.4,19.4z"/>
+	<path d="M330.4,19.6c1.6,0.1,2.8,1,3.4,2.5c1.1,2.5-0.6,5.3-3.4,5.6c-0.2,0-0.4,0-0.6,0c-2.1,0-4.1,0-6.2,0c-0.8,0-1.5-0.2-2.2-0.6
+		c-1.6-0.9-2.3-2.5-2-4.2c0.3-1.8,1.7-3.1,3.5-3.3c0.4,0,0.8,0,1.1-0.1C325,19.5,329.2,19.5,330.4,19.6z"/>
+	<path d="M182.7,19.5c0.6,0,1.2,0.1,1.7,0.3c1.8,0.7,2.8,2.4,2.6,4.3c-0.2,1.8-1.7,3.3-3.6,3.5c-0.2,0-4.7,0-6.7,0
+		c-0.5,0-1.1-0.1-1.5-0.3c-1.9-0.6-3-2.4-2.8-4.3c0.2-1.8,1.8-3.3,3.7-3.5C177.2,19.5,181.7,19.5,182.7,19.5z"/>
+</g>
+</svg><span class="chrome-crumb">VTEX × Synerise · feed architecture</span></div><div class="slide-chrome-tr">03 · Live · Category page · Special</div></div>
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="plp-special"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Row 1 is recommendations for this shopper · the listing below leaves those items out (NOT sku IN [...])</span>
+    <span class="slide-footer-r">11 / 15</span>
+  </div>
+</section>
+
+<!-- 12 — LIVE: one query, twenty shelves -->
+<section class="slide slide-live" data-slide="12" aria-hidden="true">
   <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
 <g>
@@ -1654,12 +1816,12 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Twenty calls in parallel, one per store · click a bar to shop there</span>
-    <span class="slide-footer-r">10 / 11</span>
+    <span class="slide-footer-r">12 / 15</span>
   </div>
 </section>
 
-<!-- 11 — LIVE: recommendations -->
-<section class="slide slide-live" data-slide="11" aria-hidden="true">
+<!-- 13 — LIVE: recommendations -->
+<section class="slide slide-live" data-slide="13" aria-hidden="true">
   <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
 <g>
@@ -1715,7 +1877,180 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Click any card: it becomes the product on the page</span>
-    <span class="slide-footer-r">11 / 11</span>
+    <span class="slide-footer-r">13 / 15</span>
+  </div>
+</section>
+
+<!-- 14 — Summary: configuration, in Synerise and in every call -->
+<section class="slide" data-slide="14" aria-hidden="true">
+  <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
+<g>
+	<path d="M23.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6C1,6.7,2.9,4.2,5.8,2.4
+		c1.7-1,3.6-1.7,5.6-2.1C12.7,0.1,14,0,15.3,0c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C6,39.6,20.4,39.5,23.3,39.4z"/>
+	<path d="M277.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6c0.7-3.4,2.6-5.9,5.5-7.7
+		c1.7-1,3.6-1.7,5.6-2.1c1.3-0.2,2.6-0.4,3.9-0.4c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C259.9,39.6,274.3,39.5,277.3,39.4z"
+		/>
+	<path d="M140.2,43c0,0.5,0,1.1-0.1,1.6c-0.3,2-1.9,3.4-3.9,3.5c-2,0.1-3.8-1.2-4.2-3.2c-0.1-0.6-0.2-1.2-0.2-1.9
+		c0-7.4,0-14.8,0-22.3c0-1,0-2-0.2-3c-1.2-5.1-4.4-8.2-9.5-9.3c-4.3-1-8.2,0.2-11.4,3.2c-2.4,2.2-3.6,5.1-3.6,8.3
+		c0,1.9,0,17.1,0,22.8c0,0.4,0,0.9,0,1.3c0,2.2-2,3.9-4.1,3.9c-2.3,0-4.1-1.6-4.2-3.9c0-0.4,0-0.8,0-1.1c0-7.5,0.1-14.9,0-22.4
+		c-0.2-10.7,7.9-19,17.5-20.3c7.7-1.1,14.3,1.3,19.4,7.2c3.2,3.6,4.6,8,4.6,12.8C140.2,23.9,140.2,39,140.2,43z"/>
+	<path d="M182.7,0c0.7,0,1.3,0.1,2,0.4c1.6,0.8,2.6,2.5,2.4,4.2c-0.3,1.9-1.8,3.3-3.7,3.5c-0.4,0-7.6,0-10.8,0
+		c-3.3,0-6.2,1.1-8.6,3.4c-2.4,2.3-3.7,5.1-3.8,8.4c-0.1,2.8-0.1,5.5,0,8.3c0.2,6.7,5.4,10.8,10.3,11.5c0.9,0.1,1.9,0.2,2.9,0.2
+		c2.9,0,9.5,0,9.9,0c2.2,0,3.8,1.9,3.8,4c0,2-1.6,3.9-3.7,4.1c-0.3,0-7.8,0.1-11.2,0c-6.6-0.2-12-2.8-16.2-8
+		c-2.8-3.5-4.1-7.5-4.2-12c0-2.5,0-5.1,0-7.6c-0.1-8.9,5.5-16.2,13.4-19.2c2.2-0.8,4.5-1.3,6.9-1.3C173.7,0,180.8,0,182.7,0z"/>
+	<path d="M329.8,0c0.8,0,1.5,0.1,2.2,0.5c1.6,0.9,2.5,2.6,2.1,4.5c-0.3,1.6-1.8,2.9-3.5,3.1c-0.5,0-1,0-1.4,0c-3.1,0-6.2,0-9.3,0
+		c-3,0-5.8,0.9-8.1,2.9c-2.8,2.3-4.3,5.3-4.3,9c0,2.7,0,5.4,0,8c0,5.5,4.1,10.6,10.2,11.6c0.9,0.2,1.9,0.2,2.9,0.2
+		c2.9,0,9.6,0,10.1,0c2.1,0.2,3.7,1.9,3.7,4c0,2.1-1.7,3.8-3.7,4.1c-0.2,0-0.4,0-0.6,0c-3.6,0-7.3,0.1-10.9,0
+		c-7.6-0.3-13.4-3.7-17.4-10.2c-1.8-2.9-2.6-6.1-2.6-9.6c0-2.7,0-5.4,0-8c0.1-7.5,3.5-13.2,9.8-17.1c3.2-2,6.7-3,10.5-3
+		C320.9,0,327.9,0,329.8,0z"/>
+	<path d="M67,18.1c0,0,17.3-16.8,17.7-17.1c1.4-1.1,3.2-1.3,4.7-0.4c1.6,0.9,2.2,2.3,2,4.1c-0.1,0.8-0.4,1.5-0.9,2.1
+		C90.2,7.1,72.6,24,72.4,24.3c-0.7,0.7-1.1,1.6-1.1,2.6c0,0.4,0,16.8,0,17.2c-0.2,1.7-1,2.9-2.6,3.5c-1.6,0.7-3.2,0.4-4.6-0.7
+		c-0.6-0.5-1-1.2-1.1-2c-0.1-0.6-0.1-1.2-0.1-1.9c0-4.8,0-15.2,0-15.5c0.1-1.6-0.5-2.7-1.6-3.8C55.7,18.6,44.1,7.3,43.7,6.9
+		c-1.4-1.5-1.5-3.8-0.2-5.4c1.3-1.6,3.7-2,5.4-0.9C50,1.3,67,18.1,67,18.1z"/>
+	<path d="M199.1,18c0-1.8,0.2-3.6,0.6-5.4c1.2-4.5,3.8-7.8,7.9-9.9c2.4-1.3,5.1-2,7.8-2.4c2.8-0.4,5.6-0.3,8.5-0.3
+		c1.3,0,2.4,0.6,3.2,1.6c1.2,1.4,1.2,3.3,0.1,4.8c-0.9,1.1-2.1,1.7-3.5,1.7c-1.5,0-3.1,0-4.6,0c-1.7,0-3.4,0.3-5.1,0.9
+		c-0.9,0.3-1.7,0.7-2.5,1.1c-2.4,1.4-3.7,3.6-4,6.3c-0.1,0.9-0.1,1.8-0.1,2.7c0,7.9,0,15.9,0,23.8c0,0.6,0,1.2-0.1,1.9
+		c-0.2,1.2-0.8,2-1.8,2.6c-1.2,0.7-2.5,0.8-3.9,0.4c-1.5-0.5-2.3-1.6-2.5-3.2c0-0.5,0-1,0-1.4C199.1,38.7,199.1,22,199.1,18z"/>
+	<path d="M232.4,19.4c0-0.6,0-1.3,0.2-1.8c0.5-1.9,2.2-3,4.2-2.9c2,0.1,3.6,1.5,3.9,3.4c0.1,0.5,0.1,1,0.1,1.4c0,7.9,0,15.9,0,23.8
+		c0,0.2,0,0.5,0,0.7c-0.1,1.7-0.9,2.9-2.4,3.6c-1.6,0.7-3.1,0.5-4.5-0.5c-0.9-0.7-1.3-1.6-1.4-2.7c0-0.4,0-0.9,0-1.3
+		C232.4,39.2,232.4,23.4,232.4,19.4z"/>
+	<path d="M330.4,19.6c1.6,0.1,2.8,1,3.4,2.5c1.1,2.5-0.6,5.3-3.4,5.6c-0.2,0-0.4,0-0.6,0c-2.1,0-4.1,0-6.2,0c-0.8,0-1.5-0.2-2.2-0.6
+		c-1.6-0.9-2.3-2.5-2-4.2c0.3-1.8,1.7-3.1,3.5-3.3c0.4,0,0.8,0,1.1-0.1C325,19.5,329.2,19.5,330.4,19.6z"/>
+	<path d="M182.7,19.5c0.6,0,1.2,0.1,1.7,0.3c1.8,0.7,2.8,2.4,2.6,4.3c-0.2,1.8-1.7,3.3-3.6,3.5c-0.2,0-4.7,0-6.7,0
+		c-0.5,0-1.1-0.1-1.5-0.3c-1.9-0.6-3-2.4-2.8-4.3c0.2-1.8,1.8-3.3,3.7-3.5C177.2,19.5,181.7,19.5,182.7,19.5z"/>
+</g>
+</svg><span class="chrome-crumb">VTEX × Synerise · feed architecture</span></div><div class="slide-chrome-tr">04 · Summary</div></div>
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack">
+      <h2 class="slide-h reveal">Configuration summary.</h2>
+      <div class="grid-2 sum reveal">
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag">In Synerise</span>set once</p>
+          <dl class="cfg">
+            <dt>Item feed</dt><dd>shared attributes, <code>name_{lang}</code>, <code>description_{lang}</code>, <code>availability</code> = array of store ids</dd>
+            <dt>Search index</dt><dd>one per language; searchable <code>name_{lang}</code>, <code>description_{lang}</code>, <code>brand</code></dd>
+            <dt>&nbsp;· filterable</dt><dd><code>availability</code>, <code>category</code>, <code>subcategory</code>, <code>brand</code>, <code>sku</code> <span>(sku: to leave items out)</span></dd>
+            <dt>&nbsp;· facets, sort</dt><dd>facets <code>brand</code>, <code>subcategory</code>, <code>price</code> (range) · sort <code>price</code>, <code>createdAt</code></dd>
+            <dt>&nbsp;· ranking</dt><dd><code>personalized</code>, <code>transactionsPopularity</code>, <code>personalizationWeights</code> for search and listing</dd>
+            <dt>AI engine config</dt><dd><code>availability</code>, <code>category</code>, <code>brand</code> filterable: recommendation filters use only these</dd>
+            <dt>Campaigns</dt><dd>one per model: similar, bought together, personalized. Shared by every language</dd>
+            <dt>Tracking code</dt><dd>tracker key + JS SDK on every page: profile UUID and events</dd>
+          </dl>
+        </div>
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag">In every call</span>front end, tracker key</p>
+          <dl class="cfg">
+            <dt>Every call</dt><dd><code>token={trackerKey}</code> · <code>clientUUID</code> from the SDK (<code>_snrs_uuid</code>)</dd>
+            <dt>Search</dt><dd><code>/indices/{index_lang}/query</code> · <code>filters=availability == "{store}"</code> · <code>facets=brand&amp;facets=price</code> · <code>includeMeta=true</code></dd>
+            <dt>Category page</dt><dd><code>/indices/{index_lang}/list</code> · <code>filters=category == "{cat}" AND availability == "{store}"</code> · <code>context=plp</code> · next page: <code>page</code> + <code>correlationId</code></dd>
+            <dt>&nbsp;· reco row on top</dt><dd>the listing adds <code>AND NOT sku IN [the row's ids]</code></dd>
+            <dt>Recommendations</dt><dd><code>/campaigns/{id}</code> · <code>displayAttribute=name_{lang}</code> · <code>additionalFilters=availability == "{store}"</code> · <code>filtersJoiner=AND</code></dd>
+            <dt>Events</dt><dd><code>item.search.click</code> (correlationId, position, searchType) · <code>recommendation.view</code> / <code>.click</code></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Language picks the index or the display attribute · the store is always a filter</span>
+    <span class="slide-footer-r">14 / 15</span>
+  </div>
+</section>
+
+<!-- 15 — Summary: watch out / designed to hold -->
+<section class="slide" data-slide="15" aria-hidden="true">
+  <div class="slide-chrome"><div class="slide-chrome-tl"><svg class="logo-mark" version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 334.2 48.1" style="enable-background:new 0 0 334.2 48.1;" xml:space="preserve">
+<g>
+	<path d="M23.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6C1,6.7,2.9,4.2,5.8,2.4
+		c1.7-1,3.6-1.7,5.6-2.1C12.7,0.1,14,0,15.3,0c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C6,39.6,20.4,39.5,23.3,39.4z"/>
+	<path d="M277.3,39.4c1.1,0,2.1-0.3,3-0.8c2.2-1.2,3.1-4.1,1.9-6.3c-0.9-1.7-3.2-2.3-4.2-2.6c-2.1-0.5-4.3-1-6.4-1.4
+		c-2.5-0.5-5-1-7.4-1.6c-1.6-0.4-3.2-1.1-4.5-2.1c-3.5-2.4-5.3-5.7-5.6-9.9c-0.1-1.5-0.1-3.1,0.3-4.6c0.7-3.4,2.6-5.9,5.5-7.7
+		c1.7-1,3.6-1.7,5.6-2.1c1.3-0.2,2.6-0.4,3.9-0.4c3.9,0,7.8,0,11.6,0c0.6,0,1.2,0,1.7,0.1c1.8,0.5,3.1,2.5,2.9,4.5
+		c-0.2,2.1-1.7,3.7-3.7,3.8c-0.9,0.1-8.4,0-11.2,0c-1.3,0-2.2,0.1-3.5,0.2c-1,0.1-2.3,0.5-3.2,1c-1.1,0.7-1.8,1.6-2,2.8
+		c-0.2,1-0.1,2,0.3,3c0.3,0.8,0.9,1.4,1.7,1.9c1.1,0.5,1.7,0.8,2.9,1.2c2.2,0.6,4.5,1,6.7,1.5c2.2,0.5,4.4,0.9,6.6,1.5
+		c2.5,0.7,4.7,1.9,6.5,3.7c2.5,2.4,3.8,5.4,3.9,8.8c0.1,1.3,0,2.6-0.3,3.9c-0.7,3.3-2.5,5.9-5.3,7.7c-2,1.3-4.2,1.9-6.6,2.3
+		c-1.3,0.2-2.7,0.3-4,0.3c-4.5,0-14.1,0-14.4,0c-3.1,0.1-5.3-3.4-3.6-6.4c0.7-1.2,1.7-1.9,3.1-2C259.9,39.6,274.3,39.5,277.3,39.4z"
+		/>
+	<path d="M140.2,43c0,0.5,0,1.1-0.1,1.6c-0.3,2-1.9,3.4-3.9,3.5c-2,0.1-3.8-1.2-4.2-3.2c-0.1-0.6-0.2-1.2-0.2-1.9
+		c0-7.4,0-14.8,0-22.3c0-1,0-2-0.2-3c-1.2-5.1-4.4-8.2-9.5-9.3c-4.3-1-8.2,0.2-11.4,3.2c-2.4,2.2-3.6,5.1-3.6,8.3
+		c0,1.9,0,17.1,0,22.8c0,0.4,0,0.9,0,1.3c0,2.2-2,3.9-4.1,3.9c-2.3,0-4.1-1.6-4.2-3.9c0-0.4,0-0.8,0-1.1c0-7.5,0.1-14.9,0-22.4
+		c-0.2-10.7,7.9-19,17.5-20.3c7.7-1.1,14.3,1.3,19.4,7.2c3.2,3.6,4.6,8,4.6,12.8C140.2,23.9,140.2,39,140.2,43z"/>
+	<path d="M182.7,0c0.7,0,1.3,0.1,2,0.4c1.6,0.8,2.6,2.5,2.4,4.2c-0.3,1.9-1.8,3.3-3.7,3.5c-0.4,0-7.6,0-10.8,0
+		c-3.3,0-6.2,1.1-8.6,3.4c-2.4,2.3-3.7,5.1-3.8,8.4c-0.1,2.8-0.1,5.5,0,8.3c0.2,6.7,5.4,10.8,10.3,11.5c0.9,0.1,1.9,0.2,2.9,0.2
+		c2.9,0,9.5,0,9.9,0c2.2,0,3.8,1.9,3.8,4c0,2-1.6,3.9-3.7,4.1c-0.3,0-7.8,0.1-11.2,0c-6.6-0.2-12-2.8-16.2-8
+		c-2.8-3.5-4.1-7.5-4.2-12c0-2.5,0-5.1,0-7.6c-0.1-8.9,5.5-16.2,13.4-19.2c2.2-0.8,4.5-1.3,6.9-1.3C173.7,0,180.8,0,182.7,0z"/>
+	<path d="M329.8,0c0.8,0,1.5,0.1,2.2,0.5c1.6,0.9,2.5,2.6,2.1,4.5c-0.3,1.6-1.8,2.9-3.5,3.1c-0.5,0-1,0-1.4,0c-3.1,0-6.2,0-9.3,0
+		c-3,0-5.8,0.9-8.1,2.9c-2.8,2.3-4.3,5.3-4.3,9c0,2.7,0,5.4,0,8c0,5.5,4.1,10.6,10.2,11.6c0.9,0.2,1.9,0.2,2.9,0.2
+		c2.9,0,9.6,0,10.1,0c2.1,0.2,3.7,1.9,3.7,4c0,2.1-1.7,3.8-3.7,4.1c-0.2,0-0.4,0-0.6,0c-3.6,0-7.3,0.1-10.9,0
+		c-7.6-0.3-13.4-3.7-17.4-10.2c-1.8-2.9-2.6-6.1-2.6-9.6c0-2.7,0-5.4,0-8c0.1-7.5,3.5-13.2,9.8-17.1c3.2-2,6.7-3,10.5-3
+		C320.9,0,327.9,0,329.8,0z"/>
+	<path d="M67,18.1c0,0,17.3-16.8,17.7-17.1c1.4-1.1,3.2-1.3,4.7-0.4c1.6,0.9,2.2,2.3,2,4.1c-0.1,0.8-0.4,1.5-0.9,2.1
+		C90.2,7.1,72.6,24,72.4,24.3c-0.7,0.7-1.1,1.6-1.1,2.6c0,0.4,0,16.8,0,17.2c-0.2,1.7-1,2.9-2.6,3.5c-1.6,0.7-3.2,0.4-4.6-0.7
+		c-0.6-0.5-1-1.2-1.1-2c-0.1-0.6-0.1-1.2-0.1-1.9c0-4.8,0-15.2,0-15.5c0.1-1.6-0.5-2.7-1.6-3.8C55.7,18.6,44.1,7.3,43.7,6.9
+		c-1.4-1.5-1.5-3.8-0.2-5.4c1.3-1.6,3.7-2,5.4-0.9C50,1.3,67,18.1,67,18.1z"/>
+	<path d="M199.1,18c0-1.8,0.2-3.6,0.6-5.4c1.2-4.5,3.8-7.8,7.9-9.9c2.4-1.3,5.1-2,7.8-2.4c2.8-0.4,5.6-0.3,8.5-0.3
+		c1.3,0,2.4,0.6,3.2,1.6c1.2,1.4,1.2,3.3,0.1,4.8c-0.9,1.1-2.1,1.7-3.5,1.7c-1.5,0-3.1,0-4.6,0c-1.7,0-3.4,0.3-5.1,0.9
+		c-0.9,0.3-1.7,0.7-2.5,1.1c-2.4,1.4-3.7,3.6-4,6.3c-0.1,0.9-0.1,1.8-0.1,2.7c0,7.9,0,15.9,0,23.8c0,0.6,0,1.2-0.1,1.9
+		c-0.2,1.2-0.8,2-1.8,2.6c-1.2,0.7-2.5,0.8-3.9,0.4c-1.5-0.5-2.3-1.6-2.5-3.2c0-0.5,0-1,0-1.4C199.1,38.7,199.1,22,199.1,18z"/>
+	<path d="M232.4,19.4c0-0.6,0-1.3,0.2-1.8c0.5-1.9,2.2-3,4.2-2.9c2,0.1,3.6,1.5,3.9,3.4c0.1,0.5,0.1,1,0.1,1.4c0,7.9,0,15.9,0,23.8
+		c0,0.2,0,0.5,0,0.7c-0.1,1.7-0.9,2.9-2.4,3.6c-1.6,0.7-3.1,0.5-4.5-0.5c-0.9-0.7-1.3-1.6-1.4-2.7c0-0.4,0-0.9,0-1.3
+		C232.4,39.2,232.4,23.4,232.4,19.4z"/>
+	<path d="M330.4,19.6c1.6,0.1,2.8,1,3.4,2.5c1.1,2.5-0.6,5.3-3.4,5.6c-0.2,0-0.4,0-0.6,0c-2.1,0-4.1,0-6.2,0c-0.8,0-1.5-0.2-2.2-0.6
+		c-1.6-0.9-2.3-2.5-2-4.2c0.3-1.8,1.7-3.1,3.5-3.3c0.4,0,0.8,0,1.1-0.1C325,19.5,329.2,19.5,330.4,19.6z"/>
+	<path d="M182.7,19.5c0.6,0,1.2,0.1,1.7,0.3c1.8,0.7,2.8,2.4,2.6,4.3c-0.2,1.8-1.7,3.3-3.6,3.5c-0.2,0-4.7,0-6.7,0
+		c-0.5,0-1.1-0.1-1.5-0.3c-1.9-0.6-3-2.4-2.8-4.3c0.2-1.8,1.8-3.3,3.7-3.5C177.2,19.5,181.7,19.5,182.7,19.5z"/>
+</g>
+</svg><span class="chrome-crumb">VTEX × Synerise · feed architecture</span></div><div class="slide-chrome-tr">04 · Summary</div></div>
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack">
+      <h2 class="slide-h reveal">What to watch, and what already holds.</h2>
+      <div class="grid-2 sum reveal">
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag tag-warn">Watch out</span></p>
+          <ul class="notes notes-warn">
+            <li><b>A bad filter never errors.</b> A typo or a non-filterable attribute drops the filter and returns the whole catalog. Check <code>totalCount</code>.</li>
+            <li><b>Recommendations filter only on AI-engine filterable attributes.</b> Anything else is ignored, with HTTP 200.</li>
+            <li><b>No recommendation matches = HTTP 404 <code>REC-016</code></b>, not an empty list. Treat it as an empty rail.</li>
+            <li><b>Facets: repeat the parameter.</b> <code>…/query?query=milk&amp;facets=brand&amp;facets=price</code>. Written as <code>facets=brand,price</code> it asks for one attribute called &ldquo;brand,price&rdquo; and returns no facet.</li>
+            <li><b>Sorting switches off merchandising.</b> <code>sortBy</code> disables boosts, pins and rules.</li>
+            <li><b>Ranking weights are not on by default.</b> An index without <code>scoring</code> weights ranks in catalog order: no popularity, no personalization. Set <code>personalized</code>, <code>transactionsPopularity</code> and the per-endpoint <code>personalizationWeights</code>.</li>
+          </ul>
+        </div>
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag tag-ok">Designed to hold</span>no need to worry about</p>
+          <ul class="notes notes-ok">
+            <li><b><code>==</code> on an array matches one whole element.</b> <code>store_11</code> never matches <code>store_111</code>; letter case does not matter.</li>
+            <li><b>The store filter reaches the facets.</b> Brands the store does not sell drop out of the brand facet.</li>
+            <li><b>The tracker key in the page is by design.</b> It reads search and recommendations; it cannot read or change configuration.</li>
+            <li><b>One campaign serves every language.</b> <code>displayAttribute</code> returns the shopper&rsquo;s names.</li>
+            <li><b>Leaving the reco row out is server-side.</b> Counts, facets and pages stay right.</li>
+            <li><b>Catalog updates reach the index in minutes</b>, with no rebuild. A config change rebuilds in 6&ndash;10 minutes while the index keeps serving.</li>
+            <li><b>Store-scoped calls are fast.</b> About 100 ms each; twenty in parallel (slide 12) are fine.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Measured live on the demo workspace, October 2026</span>
+    <span class="slide-footer-r">15 / 15</span>
   </div>
 </section>
 
@@ -1825,7 +2160,7 @@ code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-si
 </script>
 
 <script>
-window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about the workspace. The tracker key is the public front-end key from the tracking code: it is meant to sit in a web page. Never put a workspace API key here.", "trackerKey": "b8e6187d-6cf5-4fdf-828e-4baaa3772f96", "apiBase": "https://api.synerise.com", "sdkUrl": "//web.snrbox.com/synerise-javascript-sdk.min.js", "app": {"baseUrl": "https://app.synerise.com"}, "languages": [{"code": "en", "label": "English", "index": "bee3131867cc77a2942e85b44b60496d1790767310", "query": "coffee"}, {"code": "es", "label": "Español", "index": "b99326a0847d4459a093bef6be2b72a01790767311", "query": "café"}, {"code": "fr", "label": "Français", "index": "e0366b8640ba163cdbe31bff84209e071790767311", "query": "café"}], "campaigns": [{"key": "similar", "id": "PNRRbTrHVXip", "label": "Similar items", "needsItem": true}, {"key": "cross-sell", "id": "aFw56uwMvbmI", "label": "Bought together", "needsItem": true}, {"key": "personalized", "id": "We1ZZzRzbkh7", "label": "For this shopper", "needsItem": false}], "stores": [{"id": "ST-ES-MAD-01", "name": "Madrid Chamartin", "city": "Madrid", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-MAD-02", "name": "Madrid Carabanchel", "city": "Madrid", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-BCN-01", "name": "Barcelona Diagonal Mar", "city": "Barcelona", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-BCN-02", "name": "Barcelona Sants", "city": "Barcelona", "country": "Spain", "cc": "ES", "format": "City", "skus": 324}, {"id": "ST-ES-VLC-01", "name": "Valencia Campanar", "city": "Valencia", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-SVQ-01", "name": "Sevilla Nervion", "city": "Sevilla", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-AGP-01", "name": "Malaga Teatinos", "city": "Málaga", "country": "Spain", "cc": "ES", "format": "Supermarket", "skus": 631}, {"id": "ST-ES-ZAZ-01", "name": "Zaragoza Actur", "city": "Zaragoza", "country": "Spain", "cc": "ES", "format": "Hypermarket", "skus": 995}, {"id": "ST-ES-BIO-01", "name": "Bilbao Deusto", "city": "Bilbao", "country": "Spain", "cc": "ES", "format": "Supermarket", "skus": 627}, {"id": "ST-IT-MIL-01", "name": "Milano Certosa", "city": "Milano", "country": "Italy", "cc": "IT", "format": "Hypermarket", "skus": 971}, {"id": "ST-IT-ROM-01", "name": "Roma Portuense", "city": "Roma", "country": "Italy", "cc": "IT", "format": "Hypermarket", "skus": 971}, {"id": "ST-IT-TRN-01", "name": "Torino Lingotto", "city": "Torino", "country": "Italy", "cc": "IT", "format": "Supermarket", "skus": 603}, {"id": "ST-IT-NAP-01", "name": "Napoli Fuorigrotta", "city": "Napoli", "country": "Italy", "cc": "IT", "format": "City", "skus": 312}, {"id": "ST-FR-LYS-01", "name": "Lyon Part-Dieu", "city": "Lyon", "country": "France", "cc": "FR", "format": "Hypermarket", "skus": 935}, {"id": "ST-FR-TLS-01", "name": "Toulouse Purpan", "city": "Toulouse", "country": "France", "cc": "FR", "format": "Supermarket", "skus": 591}, {"id": "ST-PT-LIS-01", "name": "Lisboa Alvalade", "city": "Lisboa", "country": "Portugal", "cc": "PT", "format": "Hypermarket", "skus": 928}, {"id": "ST-PT-OPO-01", "name": "Porto Boavista", "city": "Porto", "country": "Portugal", "cc": "PT", "format": "Supermarket", "skus": 585}, {"id": "ST-PT-BRG-01", "name": "Braga Maximinos", "city": "Braga", "country": "Portugal", "cc": "PT", "format": "Supermarket", "skus": 590}, {"id": "ST-DE-HAM-01", "name": "Hamburg Barmbek", "city": "Hamburg", "country": "Germany", "cc": "DE", "format": "Hypermarket", "skus": 875}, {"id": "ST-DE-CGN-01", "name": "Koln Ehrenfeld", "city": "Köln", "country": "Germany", "cc": "DE", "format": "City", "skus": 294}], "personas": [{"uuid": "b2a45f87-ac05-4e2a-bb03-c893c217b1d2", "name": "Alexis Lee", "note": "Lisboa · 73% beverages"}, {"uuid": "1ae826f6-d91b-443f-a3cb-d462a361c05a", "name": "Christine Burke", "note": "Toulouse · 55% beverages"}, {"uuid": "e1e3ff05-0a78-4c21-9ca3-368459c9bf28", "name": "Daniel Young", "note": "Barcelona · 81% health & beauty"}, {"uuid": "36046d50-48bf-41f9-8984-de0d051a4b63", "name": "Jamie Dunlap", "note": "Sevilla · 74% household"}, {"uuid": "701f6aaa-cb8e-4f5d-b974-a22fac1d1055", "name": "William Butler", "note": "Malaga · 81% beverages"}], "defaults": {"store": "ST-ES-BCN-02", "lang": "es", "item": "HM-GRO-0116"}};
+window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about the workspace. The tracker key is the public front-end key from the tracking code: it is meant to sit in a web page. Never put a workspace API key here.", "trackerKey": "b8e6187d-6cf5-4fdf-828e-4baaa3772f96", "apiBase": "https://api.synerise.com", "sdkUrl": "//web.snrbox.com/synerise-javascript-sdk.min.js", "defaults": {"store": "ST-ES-BCN-02", "lang": "es", "item": "HM-GRO-0116", "category": "Beverages"}, "languages": [{"code": "en", "label": "English", "index": "bee3131867cc77a2942e85b44b60496d1790767310", "query": "coffee"}, {"code": "es", "label": "Español", "index": "b99326a0847d4459a093bef6be2b72a01790767311", "query": "café"}, {"code": "fr", "label": "Français", "index": "e0366b8640ba163cdbe31bff84209e071790767311", "query": "café"}], "categories": [{"value": "Grocery", "en": "Grocery", "es": "Alimentación", "fr": "Épicerie"}, {"value": "Beverages", "en": "Beverages", "es": "Bebidas", "fr": "Boissons"}, {"value": "Health & Beauty", "en": "Health & Beauty", "es": "Salud y belleza", "fr": "Beauté et santé"}, {"value": "Home & Household", "en": "Home & Household", "es": "Hogar", "fr": "Maison"}, {"value": "Baby & Kids", "en": "Baby & Kids", "es": "Bebé y niños", "fr": "Bébé et enfants"}], "campaigns": [{"key": "similar", "id": "PNRRbTrHVXip", "label": "Similar items", "needsItem": true}, {"key": "cross-sell", "id": "aFw56uwMvbmI", "label": "Bought together", "needsItem": true}, {"key": "personalized", "id": "We1ZZzRzbkh7", "label": "For this shopper", "needsItem": false}], "stores": [{"id": "ST-ES-MAD-01", "name": "Madrid Chamartin", "skus": 995}, {"id": "ST-ES-MAD-02", "name": "Madrid Carabanchel", "skus": 995}, {"id": "ST-ES-BCN-01", "name": "Barcelona Diagonal Mar", "skus": 995}, {"id": "ST-ES-BCN-02", "name": "Barcelona Sants", "skus": 324}, {"id": "ST-ES-VLC-01", "name": "Valencia Campanar", "skus": 995}, {"id": "ST-ES-SVQ-01", "name": "Sevilla Nervion", "skus": 995}, {"id": "ST-ES-AGP-01", "name": "Malaga Teatinos", "skus": 631}, {"id": "ST-ES-ZAZ-01", "name": "Zaragoza Actur", "skus": 995}, {"id": "ST-ES-BIO-01", "name": "Bilbao Deusto", "skus": 627}, {"id": "ST-IT-MIL-01", "name": "Milano Certosa", "skus": 971}, {"id": "ST-IT-ROM-01", "name": "Roma Portuense", "skus": 971}, {"id": "ST-IT-TRN-01", "name": "Torino Lingotto", "skus": 603}, {"id": "ST-IT-NAP-01", "name": "Napoli Fuorigrotta", "skus": 312}, {"id": "ST-FR-LYS-01", "name": "Lyon Part-Dieu", "skus": 935}, {"id": "ST-FR-TLS-01", "name": "Toulouse Purpan", "skus": 591}, {"id": "ST-PT-LIS-01", "name": "Lisboa Alvalade", "skus": 928}, {"id": "ST-PT-OPO-01", "name": "Porto Boavista", "skus": 585}, {"id": "ST-PT-BRG-01", "name": "Braga Maximinos", "skus": 590}, {"id": "ST-DE-HAM-01", "name": "Hamburg Barmbek", "skus": 875}, {"id": "ST-DE-CGN-01", "name": "Koln Ehrenfeld", "skus": 294}], "personas": [{"uuid": "b2a45f87-ac05-4e2a-bb03-c893c217b1d2", "name": "Alexis Lee", "note": "Lisboa · 73% beverages"}, {"uuid": "1ae826f6-d91b-443f-a3cb-d462a361c05a", "name": "Christine Burke", "note": "Toulouse · 55% beverages"}, {"uuid": "e1e3ff05-0a78-4c21-9ca3-368459c9bf28", "name": "Daniel Young", "note": "Barcelona · 81% health & beauty"}, {"uuid": "36046d50-48bf-41f9-8984-de0d051a4b63", "name": "Jamie Dunlap", "note": "Sevilla · 74% household"}, {"uuid": "701f6aaa-cb8e-4f5d-b974-a22fac1d1055", "name": "William Butler", "note": "Malaga · 81% beverages"}]};
 </script>
 <script>
 /* ============================================================
@@ -1892,10 +2227,11 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   var LS_KEY = 'vtex-deck';
 
   // ---------------------------------------------------------------- state --
-  var LANG = {};
-  CFG.languages.forEach(function (l) { LANG[l.code] = l; });
-  var STORE = {};
-  CFG.stores.forEach(function (s) { STORE[s.id] = s; });
+  function byKey(list, key) { var o = {}; list.forEach(function (x) { o[x[key]] = x; }); return o; }
+  var LANG = byKey(CFG.languages, 'code');
+  var STORE = byKey(CFG.stores, 'id');
+  var CAT = byKey(CFG.categories, 'value');
+  var CAMPAIGN = byKey(CFG.campaigns, 'key');
   // One flat list of stores, by name: the demo chain's countries are not a
   // dimension here (slide 02 maps a country to a workspace of its own).
   var STORES = CFG.stores.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
@@ -1907,42 +2243,53 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     lang: LANG[saved.lang] ? saved.lang : CFG.defaults.lang,
     shopper: saved.shopper || 'sdk',
     storeFilter: true,
-    query: {},               // per language, so switching back restores it
+    query: {},               // search: per language, so switching back restores it
     facet: { brand: null, price: null },
-    item: CFG.defaults.item,
+    item: CFG.defaults.item, // recommendations: the visited product
+    cat: CFG.defaults.category, // category page
+    sub: null,
+    sort: 'rel',
   };
   CFG.languages.forEach(function (l) { state.query[l.code] = l.query; });
   function save() {
     try { localStorage.setItem(LS_KEY, JSON.stringify({ store: state.store, lang: state.lang, shopper: state.shopper })); } catch (e) { /* private mode */ }
   }
 
+  var views = [];            // every live view on the page (filled at boot)
   var items = {};            // itemId → last seen attributes (search or reco)
   function remember(list) { (list || []).forEach(function (it) { if (it && it.itemId) items[it.itemId] = Object.assign({}, items[it.itemId], it); }); }
+
+  // ------------------------------------------------------------- strings --
+  var UI = {
+    en: { ph: 'Search Havenmart', res: 'results in', chain: 'across the chain', none: 'Nothing on this shelf.', dym: 'Did you mean', showing: 'Showing results for', inS: 'in store', outS: 'not here', brand: 'Brand', price: 'Price', toReco: 'Recommendations for', all: 'All stores', visited: 'Visited product', picked: 'Picked for you', more: 'Show more', inCat: 'in', sortRel: 'Recommended', sortPa: 'Price: low to high', sortPd: 'Price: high to low', sortNew: 'Newest', allSubs: 'All', locale: 'en-IE' },
+    es: { ph: 'Buscar en Havenmart', res: 'resultados en', chain: 'en toda la cadena', none: 'Nada en este estante.', dym: '¿Quisiste decir', showing: 'Resultados de', inS: 'en tienda', outS: 'no está', brand: 'Marca', price: 'Precio', toReco: 'Recomendaciones para', all: 'Todas las tiendas', visited: 'Producto visitado', picked: 'Elegidos para ti', more: 'Ver más', inCat: 'en', sortRel: 'Recomendados', sortPa: 'Precio: de menor a mayor', sortPd: 'Precio: de mayor a menor', sortNew: 'Novedades', allSubs: 'Todo', locale: 'es-ES' },
+    fr: { ph: 'Rechercher sur Havenmart', res: 'résultats à', chain: "dans toute l'enseigne", none: 'Rien dans ce rayon.', dym: 'Vouliez-vous dire', showing: 'Résultats pour', inS: 'en magasin', outS: 'absent', brand: 'Marque', price: 'Prix', toReco: 'Recommandations pour', all: 'Tous les magasins', visited: 'Produit visité', picked: 'Choisis pour vous', more: 'Voir plus', inCat: 'à', sortRel: 'Recommandés', sortPa: 'Prix croissant', sortPd: 'Prix décroissant', sortNew: 'Nouveautés', allSubs: 'Tout', locale: 'fr-FR' },
+  };
+  function t(k) { return (UI[state.lang] || UI.en)[k]; }
 
   // ------------------------------------------------------------ helpers --
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  function h(html) { var t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
-  var UI = {
-    en: { ph: 'Search Havenmart', res: 'results in', chain: 'across the chain', none: 'Nothing on this shelf.', dym: 'Did you mean', showing: 'Showing results for', inS: 'in store', outS: 'not here', brand: 'Brand', price: 'Price', toReco: 'Recommendations for', all: 'All stores', visited: 'Visited product', locale: 'en-IE' },
-    es: { ph: 'Buscar en Havenmart', res: 'resultados en', chain: 'en toda la cadena', none: 'Nada en este estante.', dym: '¿Quisiste decir', showing: 'Resultados de', inS: 'en tienda', outS: 'no está', brand: 'Marca', price: 'Precio', toReco: 'Recomendaciones para', all: 'Todas las tiendas', visited: 'Producto visitado', locale: 'es-ES' },
-    fr: { ph: 'Rechercher sur Havenmart', res: 'résultats à', chain: "dans toute l'enseigne", none: 'Rien dans ce rayon.', dym: 'Vouliez-vous dire', showing: 'Résultats pour', inS: 'en magasin', outS: 'absent', brand: 'Marque', price: 'Prix', toReco: 'Recommandations pour', all: 'Tous les magasins', visited: 'Produit visité', locale: 'fr-FR' },
-  };
-  function t(k) { return (UI[state.lang] || UI.en)[k]; }
-  function price(p) {
-    var n = parseFloat(p);
+  function h(html) { var tpl = document.createElement('template'); tpl.innerHTML = html.trim(); return tpl.content.firstChild; }
+  function short(k) { return k.slice(0, 4) + '…' + k.slice(-4); }
+  // Euros in the shopper's locale; `whole` drops ".00" (slider labels).
+  function eur(n, whole) {
+    n = parseFloat(n);
     if (isNaN(n)) return '';
-    try { return new Intl.NumberFormat(t('locale'), { style: 'currency', currency: 'EUR' }).format(n); } catch (e) { return '€' + n.toFixed(2); }
-  }
-  // Price facet: a range facet returns only {min, max} for the result set, so
-  // the slider's ends come from that and the picked range becomes the filter
-  // price >= lo AND price <= hi. Ends are rounded out to whole euros.
-  function priceIql(p) { return 'price >= ' + p.lo + ' AND price <= ' + p.hi; }
-  function money(n) {
-    try { return new Intl.NumberFormat(t('locale'), { style: 'currency', currency: 'EUR', maximumFractionDigits: n % 1 ? 2 : 0 }).format(n); } catch (e) { return '€' + n; }
+    var digits = whole && n % 1 === 0 ? 0 : 2;
+    try { return new Intl.NumberFormat(t('locale'), { style: 'currency', currency: 'EUR', minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n); } catch (e) { return '€' + n.toFixed(digits); }
   }
   function nameOf(it) { return it['name_' + state.lang] || it.name_en || it.name || it.itemId; }
+  function catLabel(v) { var c = CAT[v]; return c ? (c[state.lang] || c.en) : v; }
+  function storeLabel(id) { var s = STORE[id]; return s ? s.name : id; }
+
+  // IQL. Strings are double-quoted; == on an array attribute matches one
+  // whole element (availability == "ST-ES-MAD-01" never hits "…-011").
+  function iqlStr(v) { return '"' + String(v).replace(/"/g, '\\"') + '"'; }
+  function availClause(store) { return 'availability == ' + iqlStr(store || state.store); }
+  function and(parts) { return parts.filter(Boolean).join(' AND '); }
+
   function catClass(c) {
     c = (c || '').toLowerCase();
     if (c.indexOf('grocery') === 0) return 'cat-grocery';
@@ -1968,25 +2315,39 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     if (s === null) return '';
     return s ? '<span class="stock in">' + esc(t('inS')) + '</span>' : '<span class="stock out">' + esc(t('outS')) + '</span>';
   }
-  function storeLabel(id) { var s = STORE[id]; return s ? s.name : id; }
-  function availClause() { return 'availability == "' + state.store + '"'; }
-  function short(k) { return k.slice(0, 4) + '…' + k.slice(-4); }
+  // One product card, the same on every live slide.
+  function card(it, i) {
+    return '<button type="button" class="pcard is-new" style="animation-delay:' + (i * 30) + 'ms" data-id="' + esc(it.itemId) + '" data-pos="' + (i + 1) + '">' +
+      tile(it) + stockBadge(it) + '<span class="pname">' + esc(nameOf(it)) + '</span>' +
+      '<span class="pmeta"><span class="pbrand">' + esc(it.brand || '') + '</span><span class="pprice">' + eur(it.price) + '</span></span></button>';
+  }
+  function cards(list) { return list.map(card).join('') || '<div class="empty">' + esc(t('none')) + '</div>'; }
+  function onCards(box, fn) {
+    box.querySelectorAll('.pcard').forEach(function (n) {
+      n.addEventListener('click', function () { fn(n.getAttribute('data-id'), +n.getAttribute('data-pos')); });
+    });
+  }
+  function errBox(r) {
+    var b = r.body || {};
+    return '<div class="err-box">' + esc((b.errorCode || r.status) + ' · ' + (b.message || b.error || JSON.stringify(b).slice(0, 300))) + '</div>';
+  }
 
   // ---------------------------------------------------------------- SDK --
   // The tracking code in <head> loads the SDK and calls SR.init with the
   // tracker key; onSyneriseLoad then fires 'synerise:ready'. The SDK assigns
-  // this browser an anonymous profile UUID, which is what search and
-  // recommendations get as clientUUID when the shopper is "this browser".
+  // this browser an anonymous profile UUID (cookie _snrs_uuid), which is what
+  // search and recommendations get as clientUUID when the shopper is "this
+  // browser".
   var sdk = { state: 'loading', uuid: null, events: 0 };
   var fallbackUuid = (function () {
+    var make = function () { return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()); };
     try {
       var u = localStorage.getItem(LS_KEY + ':uuid');
-      if (!u) { u = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())); localStorage.setItem(LS_KEY + ':uuid', u); }
+      if (!u) { u = make(); localStorage.setItem(LS_KEY + ':uuid', u); }
       return u;
-    } catch (e) { return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()); }
+    } catch (e) { return make(); }
   })();
   function readSdkUuid() {
-    try { if (window.SR && SR.client && typeof SR.client.getUuid === 'function') { var u = SR.client.getUuid(); if (u) return u; } } catch (e) { /* not ready */ }
     var m = document.cookie.match(/(?:^|;\s*)_snrs_uuid=([^;]+)/);
     if (m) return decodeURIComponent(m[1]);
     try { var l = localStorage.getItem('_snrs_uuid'); if (l) return l.replace(/"/g, ''); } catch (e) { /* ignore */ }
@@ -2005,11 +2366,8 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   if (window.SR && window.SR.init && typeof window.SR.event === 'object') onSdk();
   setTimeout(function () { if (sdk.state === 'loading') { sdk.state = 'blocked'; refreshSdkViews(); } }, 8000);
 
-  function shopperUuid() {
-    if (state.shopper === 'sdk') return sdk.uuid || fallbackUuid;
-    return state.shopper;
-  }
   function shopperIsBrowser() { return state.shopper === 'sdk'; }
+  function shopperUuid() { return shopperIsBrowser() ? (sdk.uuid || fallbackUuid) : state.shopper; }
 
   // Events go through the SDK, so they land on this browser's profile. With a
   // borrowed persona selected they would land on the wrong profile, so they
@@ -2059,6 +2417,30 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       return { status: 0, body: { error: err.message }, ms: ms, replay: false };
     });
   }
+  function totalOf(b) { return b && b.meta ? b.meta.totalCount : null; }
+  function hits(b) { var n = totalOf(b); return n == null ? '?' : n; }
+  function search(kind, params, wire, summary) {
+    return call('/search/v2/indices/' + LANG[state.lang].index + '/' + kind, params, wire, {
+      quiet: summary === false,
+      summary: function (b, s) { return s === 200 ? summary(b) : (b.message || b.error || ''); },
+    });
+  }
+  // Recommendations: one campaign per model, the language as displayAttribute,
+  // filters (store, category) as additionalFilters joined with AND. A filter
+  // that matches nothing comes back as 404 REC-016 (search says 200 with
+  // totalCount 0): that is an empty rail, not an error.
+  function recommend(campaign, opts, wire) {
+    var params = [['clientUUID', shopperUuid()]];
+    if (campaign.needsItem) params.push(['itemId', state.item]);
+    params.push(['displayAttribute', 'name_' + state.lang], ['displayAttribute', 'imageUrl']);
+    if (opts.filter) params.push(['additionalFilters', opts.filter], ['filtersJoiner', 'AND']);
+    if (opts.contextItems) params.push(['includeContextItems', 'true']);
+    return call('/recommendations/v2/recommend/campaigns/' + campaign.id, params, wire, {
+      summary: function (b, s) { return s === 200 ? (b.data || []).length + ' items' : (b.errorCode || '') + ' ' + (b.message || ''); },
+    }).then(function (r) {
+      return r.status === 404 && r.body && r.body.errorCode === 'REC-016' ? { status: 200, body: { data: [], extras: {} }, ms: r.ms } : r;
+    });
+  }
 
   var badgeState = 'live';
   function setBadge(s) {
@@ -2071,9 +2453,10 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   function badge() { return '<span data-badge class="live-badge is-live"><span class="pulse"></span>live</span>'; }
 
   // --------------------------------------------------------------- wire --
-  // The right-hand console: every request with its parameters, the status,
-  // the time, a one-line summary; SDK events in another colour.
+  // The console beside the storefront: every request with its parameters,
+  // the status, the time, a one-line summary; SDK events in another colour.
   var HL = { filters: 1, additionalFilters: 1, displayAttribute: 1, clientUUID: 1, itemId: 1, query: 1 };
+  var WIRE_HTML = '<div class="wire" data-wire><div class="wire-h"><span>Wire · browser → api.synerise.com</span><span>tracker key</span></div></div>';
   function Wire(el, compact) { this.el = el; this.compact = compact; }
   Wire.prototype.push = function (node) {
     if (!this.el) return;
@@ -2088,7 +2471,7 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       return 'indices/<mark>' + (l ? 'havenmart-' + l.code : a + '…') + '</mark>';
     }).replace(/campaigns\/(\w+)$/, function (_, id) {
       var c = CFG.campaigns.filter(function (x) { return x.id === id; })[0];
-      return 'campaigns/<mark>' + id + '</mark>' + (c ? ' <span style="color:var(--grey-500)">(' + esc(c.label) + ')</span>' : '');
+      return 'campaigns/<mark>' + id + '</mark>' + (c ? ' <span class="wire-note">(' + esc(c.label) + ')</span>' : '');
     });
     var node;
     if (this.compact) {
@@ -2100,7 +2483,7 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
         params.map(function (p) {
           var v = esc(p[1]);
           return '<div class="wire-p">' + esc(p[0]) + '=' + (HL[p[0]] ? '<mark>' + v + '</mark>' : '<b>' + v + '</b>') + '</div>';
-        }).join('') + '<div class="wire-p">token=<b>' + short(TK) + '</b> <span style="opacity:.6">tracker key</span></div>' +
+        }).join('') + '<div class="wire-p">token=<b>' + short(TK) + '</b> <span class="wire-note">tracker key</span></div>' +
         '<div class="wire-r">… </div></div>');
     }
     this.push(node);
@@ -2139,7 +2522,7 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       (opts.noFilter ? '' : '<label class="toggle"><input type="checkbox" data-k="storeFilter"' + (state.storeFilter ? ' checked' : '') + '> Store filter</label>') +
       '<span class="ctx-sp"></span>' + badge() + '</div>';
   }
-  function wireCtx(root, onChange) {
+  function wireCtx(root) {
     root.querySelectorAll('[data-ctx] select').forEach(function (sel) {
       sel.addEventListener('change', function () { setCtx(sel.getAttribute('data-k'), sel.value); });
     });
@@ -2156,35 +2539,62 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     if (k === 'lang') state.facet = { brand: null, price: null };
     save();
     // Every live slide re-renders its bar; the active one re-runs its calls.
-    views.forEach(function (v2) { v2.stale = true; });
     var active = document.querySelector('.slide.active');
-    views.forEach(function (v2) { if (active && active.contains(v2.el)) v2.show(); });
+    views.forEach(function (v2) { v2.stale = true; if (active && active.contains(v2.el)) v2.show(); });
     refreshSdkViews();
+  }
+  // Views of one kind (other than `except`) re-run when they next come on.
+  function markStale(Kind, except) { views.forEach(function (v) { if (v instanceof Kind && v !== except) v.stale = true; }); }
+
+  // The storefront frame shared by the search and category slides: brand,
+  // a middle part (search box or category tabs), the store, then the page.
+  function shop(middle, body) {
+    return ctxBar() +
+      '<div class="shop-wire">' +
+        '<div class="shop">' +
+          '<div class="shop-top">' +
+            '<div class="shop-brand">haven<span>mart</span></div>' + middle +
+            '<div class="shop-store"><b>' + esc(state.storeFilter ? storeLabel(state.store) : t('all')) + '</b>' + esc(LANG[state.lang].label) + '</div>' +
+          '</div>' + body +
+        '</div>' + WIRE_HTML +
+      '</div>';
+  }
+
+  // Clicking a product: the product becomes the context of the
+  // recommendations slide, and the summary row offers the jump.
+  function offerReco(el, id) {
+    state.item = id;
+    markStale(RecoView);
+    var sum = el.querySelector('[data-sum]');
+    var it = items[id] || { itemId: id };
+    var old = sum.querySelector('[data-go]'); if (old) old.remove();
+    var go = h('<button type="button" class="btn btn-accent" data-go>' + esc(t('toReco')) + ' ' + esc(nameOf(it)).slice(0, 40) + ' →</button>');
+    go.addEventListener('click', function () {
+      var reco = document.querySelector('[data-live="reco"]');
+      if (reco) window.deckJumpTo(window.deckSlideOf(reco));
+    });
+    sum.appendChild(go);
   }
 
   // ===================================================== search slide ====
+  // Price facet: a range facet returns only {min, max} for the result set, so
+  // the slider's ends come from that and the picked range becomes the filter
+  // price >= lo AND price <= hi. Ends are rounded out to whole euros.
+  function priceIql(p) { return 'price >= ' + p.lo + ' AND price <= ' + p.hi; }
+
   function SearchView(el) {
     this.el = el; this.stale = true; this.acTimer = null;
     this.lastFacets = { brand: {} };
   }
   SearchView.prototype.show = function () {
     var el = this.el, self = this;
-    el.innerHTML = ctxBar() +
-      '<div class="shop-wire">' +
-        '<div class="shop">' +
-          '<div class="shop-top">' +
-            '<div class="shop-brand">haven<span>mart</span></div>' +
-            '<div class="shop-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>' +
-              '<input type="search" data-q autocomplete="off" spellcheck="false" placeholder="' + esc(t('ph')) + '" value="' + esc(state.query[state.lang]) + '">' +
-              '<div class="ac" data-ac></div></div>' +
-            '<div class="shop-store"><b>' + esc(state.storeFilter ? storeLabel(state.store) : t('all')) + '</b>' + esc(LANG[state.lang].label) + '</div>' +
-          '</div>' +
-          '<div class="shop-sum" data-sum></div>' +
-          '<div class="facets" data-facets></div>' +
-          '<div class="grid-p" data-grid></div>' +
-        '</div>' +
-        '<div class="wire" data-wire><div class="wire-h"><span>Wire · browser → api.synerise.com</span><span>tracker key</span></div></div>' +
-      '</div>';
+    el.innerHTML = shop(
+      '<div class="shop-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>' +
+        '<input type="search" data-q autocomplete="off" spellcheck="false" placeholder="' + esc(t('ph')) + '" value="' + esc(state.query[state.lang]) + '">' +
+        '<div class="ac" data-ac></div></div>',
+      '<div class="shop-sum" data-sum></div>' +
+      '<div class="facets" data-facets></div>' +
+      '<div class="grid-p" data-grid></div>');
     this.wire = new Wire(el.querySelector('[data-wire]'));
     wireCtx(el);
     var q = el.querySelector('[data-q]');
@@ -2202,28 +2612,28 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     this.run();
   };
   SearchView.prototype.closeAc = function () { var a = this.el.querySelector('[data-ac]'); if (a) a.classList.remove('is-open'); };
-  SearchView.prototype.filters = function (skip) {
-    var parts = [];
-    if (state.storeFilter) parts.push(availClause());
-    if (state.facet.brand && skip !== 'brand') parts.push('brand == "' + state.facet.brand.replace(/"/g, '\\"') + '"');
-    if (state.facet.price && skip !== 'price') parts.push(priceIql(state.facet.price));
-    return parts.join(' AND ');
+  // The filter for the current picks; `opts.noStore` / `opts.noPrice` leave
+  // a clause out (the chain-wide count, the price slider's bounds).
+  SearchView.prototype.filters = function (opts) {
+    opts = opts || {};
+    return and([
+      state.storeFilter && !opts.noStore ? availClause() : '',
+      state.facet.brand ? 'brand == ' + iqlStr(state.facet.brand) : '',
+      state.facet.price && !opts.noPrice ? priceIql(state.facet.price) : '',
+    ]);
   };
   SearchView.prototype.autocomplete = function (text) {
     var self = this, ac = this.el.querySelector('[data-ac]');
     if (!text || text.length < 2) { this.closeAc(); return; }
     var params = [['query', text], ['limit', '5'], ['clientUUID', shopperUuid()]];
-    var f = state.storeFilter ? availClause() : '';
-    if (f) params.push(['filters', f]);
-    call('/search/v2/indices/' + LANG[state.lang].index + '/autocomplete', params, this.wire, {
-      summary: function (b) { return (b.data || []).length + ' items'; },
-    }).then(function (r) {
+    if (state.storeFilter) params.push(['filters', availClause()]);
+    search('autocomplete', params, this.wire, function (b) { return (b.data || []).length + ' items'; }).then(function (r) {
       if (self.el.querySelector('[data-q]').value !== text) return;
       var data = (r.body && r.body.data) || [];
       remember(data);
       if (!data.length) { self.closeAc(); return; }
       ac.innerHTML = data.map(function (it) {
-        return '<div class="ac-item" data-id="' + esc(it.itemId) + '">' + tile(it) + '<span>' + esc(nameOf(it)) + '</span><em>' + price(it.price) + '</em></div>';
+        return '<div class="ac-item" data-id="' + esc(it.itemId) + '">' + tile(it) + '<span>' + esc(nameOf(it)) + '</span><em>' + eur(it.price) + '</em></div>';
       }).join('');
       ac.classList.add('is-open');
       ac.querySelectorAll('.ac-item').forEach(function (n, i) {
@@ -2237,60 +2647,44 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   SearchView.prototype.run = function () {
     var self = this, el = this.el;
     var query = state.query[state.lang] || '';
-    var idx = LANG[state.lang].index;
-    var params = [['query', query], ['limit', '8'], ['includeMeta', 'true'], ['clientUUID', shopperUuid()],
-      ['facets', 'brand'], ['includeFacets', 'filtered'], ['caseSensitiveFacetValues', 'true'], ['maxValuesPerFacet', '6']];
-    var f = this.filters();
-    if (f) params.push(['filters', f]);
-    var main = call('/search/v2/indices/' + idx + '/query', params, this.wire, {
-      summary: function (b, s) { return s === 200 ? (b.meta ? b.meta.totalCount : '?') + ' hits' : (b.message || b.error || ''); },
-    });
+    function params(extra, filter) {
+      var p = [['query', query]].concat(extra, [['clientUUID', shopperUuid()]]);
+      if (filter) p.push(['filters', filter]);
+      return p;
+    }
+    var main = search('query', params([['limit', '8'], ['includeMeta', 'true'], ['facets', 'brand'], ['includeFacets', 'filtered'],
+      ['caseSensitiveFacetValues', 'true'], ['maxValuesPerFacet', '6']], this.filters()), this.wire,
+      function (b) { return hits(b) + ' hits'; });
     // The same query without the store clause: how much of the chain's
     // answer this store actually has.
-    var cparams = [['query', query], ['limit', '1'], ['includeMeta', 'true'], ['clientUUID', shopperUuid()]];
-    var cf = this.filters();
-    cf = cf.replace(availClause() + ' AND ', '').replace(availClause(), '');
-    if (cf) cparams.push(['filters', cf]);
-    var chain = call('/search/v2/indices/' + idx + '/query', cparams, this.wire, {
-      summary: function (b) { return (b.meta ? b.meta.totalCount : '?') + ' hits chain-wide'; },
-    });
+    var chain = search('query', params([['limit', '1'], ['includeMeta', 'true']], this.filters({ noStore: true })), this.wire,
+      function (b) { return hits(b) + ' hits chain-wide'; });
     // The slider's ends: the price facet's {min, max} under every filter
     // except the price one, so moving the slider never shrinks its own scale.
-    var bparams = [['query', query], ['limit', '1'], ['clientUUID', shopperUuid()], ['facets', 'price'], ['includeFacets', 'filtered']];
-    var bbase = this.filters('price');
-    if (bbase) bparams.push(['filters', bbase]);
-    var bounds = call('/search/v2/indices/' + idx + '/query', bparams, this.wire, {
-      summary: function (b) {
-        var pf = b.extras && b.extras.filteredFacets && b.extras.filteredFacets.price;
-        return pf ? 'price facet ' + JSON.stringify(pf) : 'no price facet';
-      },
-    }).then(function (res) {
-      var pf = res.body && res.body.extras && res.body.extras.filteredFacets && res.body.extras.filteredFacets.price;
+    var priceFacet = function (b) { return b && b.extras && b.extras.filteredFacets && b.extras.filteredFacets.price; };
+    var bounds = search('query', params([['limit', '1'], ['facets', 'price'], ['includeFacets', 'filtered']], this.filters({ noPrice: true })), this.wire,
+      function (b) { var pf = priceFacet(b); return pf ? 'price facet ' + JSON.stringify(pf) : 'no price facet'; }
+    ).then(function (res) {
+      var pf = priceFacet(res.body);
       return pf && pf.min != null ? { min: Math.floor(pf.min), max: Math.ceil(pf.max) } : null;
     });
     Promise.all([main, chain, bounds]).then(function (rs) {
-      var r = rs[0], c = rs[1], pb = rs[2];
+      var r = rs[0], ctotal = totalOf(rs[1].body), pb = rs[2];
       var grid = el.querySelector('[data-grid]'), sum = el.querySelector('[data-sum]'), fac = el.querySelector('[data-facets]');
       if (!grid) return;
-      if (r.status !== 200) {
-        grid.innerHTML = '<div class="err-box">' + esc(r.status + ' ' + JSON.stringify(r.body).slice(0, 300)) + '</div>';
-        sum.innerHTML = ''; fac.innerHTML = '';
-        return;
-      }
+      if (r.status !== 200) { grid.innerHTML = errBox(r); sum.innerHTML = ''; fac.innerHTML = ''; return; }
       var b = r.body, data = b.data || [], ex = b.extras || {};
       remember(data);
       self.correlationId = ex.correlationId;
-      var total = b.meta ? b.meta.totalCount : data.length;
-      var ctotal = c.body && c.body.meta ? c.body.meta.totalCount : null;
-      var html = state.storeFilter
-        ? '<span class="n">' + total + '</span><span class="of">' + esc(t('res')) + ' <b>' + esc(storeLabel(state.store)) + '</b>' +
-          (ctotal != null ? ' · ' + ctotal + ' ' + esc(t('chain')) : '') + '</span>'
-        : '<span class="n">' + total + '</span><span class="of">' + esc(t('chain')) + '</span>';
+      var total = totalOf(b);
+      var html = '<span class="n">' + (total == null ? data.length : total) + '</span>' + (state.storeFilter
+        ? '<span class="of">' + esc(t('res')) + ' <b>' + esc(storeLabel(state.store)) + '</b>' + (ctotal != null ? ' · ' + ctotal + ' ' + esc(t('chain')) : '') + '</span>'
+        : '<span class="of">' + esc(t('chain')) + '</span>');
       // usedSuggestion is {text, highlighted, score}, like the entries of suggestions[]
       var used = ex.usedSuggestion && (typeof ex.usedSuggestion === 'object' ? ex.usedSuggestion.text : ex.usedSuggestion);
       if (used) html += '<span class="sugg">· ' + esc(t('showing')) + ' <b>' + esc(used) + '</b></span>';
       else if (!data.length && ex.suggestions && ex.suggestions.length) {
-        html += '<span class="sugg">· ' + esc(t('dym')) + ' <b data-sugg="' + esc(ex.suggestions[0].text) + '" style="cursor:pointer;text-decoration:underline">' + esc(ex.suggestions[0].text) + '</b>?</span>';
+        html += '<span class="sugg">· ' + esc(t('dym')) + ' <b class="sugg-go" data-sugg="' + esc(ex.suggestions[0].text) + '">' + esc(ex.suggestions[0].text) + '</b>?</span>';
       }
       sum.innerHTML = html;
       var sg = sum.querySelector('[data-sugg]');
@@ -2306,29 +2700,21 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       // One row per facet: label, then its values on a single line.
       fac.innerHTML =
         (bkeys.length ? '<div class="facet-row"><span class="facet-k">' + esc(t('brand')) + '</span><div class="facet-v">' + bkeys.map(function (v) {
-          return '<button type="button" class="chip' + (state.facet.brand === v ? ' is-on' : '') + '" data-fk="brand" data-fv="' + esc(v) + '">' + esc(v) + (bvals[v] != null ? '<i>' + bvals[v] + '</i>' : '') + '</button>';
+          return '<button type="button" class="chip' + (state.facet.brand === v ? ' is-on' : '') + '" data-fv="' + esc(v) + '">' + esc(v) + (bvals[v] != null ? '<i>' + bvals[v] + '</i>' : '') + '</button>';
         }).join('') + '</div></div>' : '') +
         (pb && pb.max > pb.min ? '<div class="facet-row"><span class="facet-k">' + esc(t('price')) + '</span><div class="facet-v"><span class="pslider" data-pslider></span></div></div>' : '');
       fac.querySelectorAll('.chip').forEach(function (ch) {
         ch.addEventListener('click', function () {
-          var k = ch.getAttribute('data-fk'), v = ch.getAttribute('data-fv');
-          state.facet[k] = state.facet[k] === v ? null : v;
+          var v = ch.getAttribute('data-fv');
+          state.facet.brand = state.facet.brand === v ? null : v;
           self.run();
         });
       });
       var ps = fac.querySelector('[data-pslider]');
       if (ps) self.priceSlider(ps, pb);
 
-      grid.innerHTML = data.length ? data.map(function (it, i) {
-        return '<button type="button" class="pcard is-new" style="animation-delay:' + (i * 35) + 'ms" data-id="' + esc(it.itemId) + '" data-pos="' + (i + 1) + '">' +
-          tile(it) + stockBadge(it) + '<span class="pname">' + esc(nameOf(it)) + '</span>' +
-          '<span class="pmeta"><span class="pbrand">' + esc(it.brand || '') + '</span><span class="pprice">' + price(it.price) + '</span></span></button>';
-      }).join('') : '<div class="empty">' + esc(t('none')) + '</div>';
-      grid.querySelectorAll('.pcard').forEach(function (n) {
-        n.addEventListener('click', function () {
-          self.open(n.getAttribute('data-id'), +n.getAttribute('data-pos'), self.correlationId, 'full-text-search');
-        });
-      });
+      grid.innerHTML = cards(data);
+      onCards(grid, function (id, pos) { self.open(id, pos, self.correlationId, 'full-text-search'); });
     });
   };
   // Price slider: two range inputs on one track, snapping to 0.50 €. The label
@@ -2351,7 +2737,7 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       var x = +a.value, y = +b.value, span = pb.max - pb.min;
       fill.style.left = (100 * (x - pb.min) / span) + '%';
       fill.style.right = (100 * (pb.max - y) / span) + '%';
-      val.textContent = money(x) + ' – ' + money(y);
+      val.textContent = eur(x, true) + ' – ' + eur(y, true);
     }
     function commit() {
       var x = +a.value, y = +b.value;
@@ -2363,24 +2749,160 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     if (reset) reset.addEventListener('click', function () { state.facet.price = null; self.run(); });
     paint();
   };
-
-  // Clicking a product: the search click goes to Synerise through the SDK,
-  // the product becomes the context of the recommendations slide, and the
-  // summary row offers the jump.
+  // A search click goes to Synerise through the SDK.
   SearchView.prototype.open = function (id, pos, correlationId, searchType) {
     this.closeAc();
     track('itemSearchClick', { correlationId: correlationId, item: id, position: pos, searchType: searchType }, this.wire);
-    state.item = id;
-    views.forEach(function (v) { if (v instanceof RecoView) v.stale = true; });
-    var sum = this.el.querySelector('[data-sum]');
-    var it = items[id] || { itemId: id };
-    var old = sum.querySelector('[data-go]'); if (old) old.remove();
-    var go = h('<button type="button" class="btn btn-accent" data-go style="margin-left:auto">' + esc(t('toReco')) + ' ' + esc(nameOf(it)).slice(0, 40) + ' →</button>');
-    go.addEventListener('click', function () {
-      var reco = document.querySelector('[data-live="reco"]');
-      if (reco) window.deckJumpTo(window.deckSlideOf(reco));
+    offerReco(this.el, id);
+  };
+
+  // ================================================= category page ====
+  // A category page is a listing: /list on the same per-language index, no
+  // query, the category as a filter (plus the store, as everywhere).
+  // Mode 'special' puts a recommendation row on top (the personalized
+  // campaign, narrowed to the category) and takes those items out of the
+  // listing below with NOT sku IN [...], so nothing shows twice. That needs
+  // sku to be a filterable attribute of the index.
+  var ROW = 4;               // one row of the grid; a page is three rows
+  var SORTS = {
+    rel: { k: 'sortRel' },
+    pa:  { k: 'sortPa',  p: [['sortBy', 'price'], ['ordering', 'asc']] },
+    pd:  { k: 'sortPd',  p: [['sortBy', 'price'], ['ordering', 'desc']] },
+    nw:  { k: 'sortNew', p: [['sortBy', 'createdAt'], ['ordering', 'desc']] },
+  };
+
+  function PlpView(el, special) { this.el = el; this.special = special; this.stale = true; this.subs = {}; this.excluded = []; }
+  PlpView.prototype.show = function () {
+    var el = this.el, self = this;
+    var tabs = CFG.categories.map(function (c) {
+      return '<button type="button" class="cat-tab' + (c.value === state.cat ? ' is-on' : '') + '" data-cat="' + esc(c.value) + '">' + esc(catLabel(c.value)) + '</button>';
+    }).join('');
+    var sorts = Object.keys(SORTS).map(function (k) {
+      return '<option value="' + k + '"' + (state.sort === k ? ' selected' : '') + '>' + esc(t(SORTS[k].k)) + '</option>';
+    }).join('');
+    el.innerHTML = shop('<nav class="cat-nav">' + tabs + '</nav>',
+      '<div class="shop-body">' +
+        '<div class="shop-sum" data-sum></div>' +
+        '<div class="facets"><div class="facet-row"><span class="facet-k" data-subk></span><div class="facet-v" data-subs></div></div></div>' +
+        (this.special ? '<div class="picked"><div class="picked-h"><b>' + esc(t('picked')) + '</b><span data-pmeta></span></div><div class="grid-p" data-row></div></div>' : '') +
+        '<div class="plp-bar"><span data-plpmeta></span><select data-sort>' + sorts + '</select></div>' +
+        '<div class="grid-p" data-grid></div>' +
+        '<div class="plp-more"><button type="button" class="btn" data-more hidden>' + esc(t('more')) + '</button></div>' +
+      '</div>');
+    this.wire = new Wire(el.querySelector('[data-wire]'));
+    wireCtx(el);
+    el.querySelectorAll('[data-cat]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.cat = b.getAttribute('data-cat'); state.sub = null;
+        markStale(PlpView, self);
+        self.show();
+      });
     });
-    sum.appendChild(go);
+    el.querySelector('[data-sort]').addEventListener('change', function (e) {
+      state.sort = e.target.value;
+      markStale(PlpView, self);
+      self.run();
+    });
+    el.querySelector('[data-more]').addEventListener('click', function () { self.page(self.pageNo + 1); });
+    this.stale = false;
+    this.run();
+  };
+  PlpView.prototype.run = function () {
+    var self = this;
+    this.excluded = [];
+    (this.special ? this.picked() : Promise.resolve([])).then(function (ids) { self.excluded = ids; self.page(1); });
+  };
+  // Row 1: the personalized campaign, narrowed to the category and the store.
+  // The store clause holds only where availability is filterable in the AI
+  // engine configuration, so the row also keeps only items the store stocks.
+  PlpView.prototype.picked = function () {
+    var self = this, c = CAMPAIGN.personalized;
+    var box = this.el.querySelector('[data-row]'), meta = this.el.querySelector('[data-pmeta]');
+    box.style.opacity = '.4';
+    return recommend(c, { filter: and(['category == ' + iqlStr(state.cat), state.storeFilter ? availClause() : '']) }, this.wire).then(function (r) {
+      box.style.opacity = '';
+      if (r.status !== 200) { box.innerHTML = errBox(r); meta.textContent = ''; return []; }
+      var data = r.body.data || [], ex = r.body.extras || {};
+      remember(data);
+      var pick = (state.storeFilter ? data.filter(function (it) { return inStore(it) !== false; }) : data).slice(0, ROW);
+      var ids = pick.map(function (x) { return x.itemId; });
+      meta.textContent = c.label + ' · ' + catLabel(state.cat) + ' · ' + pick.length + ' of ' + data.length;
+      box.innerHTML = cards(pick);
+      if (ids.length) track('recommendationView', { campaignId: c.id, correlationId: ex.correlationId, items: ids }, self.wire);
+      onCards(box, function (id) {
+        track('recommendationClick', { campaignId: c.id, correlationId: ex.correlationId, item: id }, self.wire);
+        offerReco(self.el, id);
+      });
+      return ids;
+    });
+  };
+  // The listing. Page 1 also brings the subcategory facet; "show more"
+  // fetches the next page with the same filters and correlationId.
+  PlpView.prototype.page = function (n) {
+    var self = this, el = this.el, grid = el.querySelector('[data-grid]');
+    var f = and(['category == ' + iqlStr(state.cat), state.sub ? 'subcategory == ' + iqlStr(state.sub) : '', state.storeFilter ? availClause() : '',
+      this.excluded.length ? 'NOT sku IN [' + this.excluded.map(iqlStr).join(', ') + ']' : '']);
+    var params = [['limit', String(ROW * 3)], ['page', String(n)], ['includeMeta', 'true'], ['clientUUID', shopperUuid()], ['context', 'plp'], ['filters', f]];
+    if (n === 1) params.push(['facets', 'subcategory'], ['caseSensitiveFacetValues', 'true']);
+    else if (this.correlationId) params.push(['correlationId', this.correlationId]);
+    params = params.concat(SORTS[state.sort].p || []);
+    if (n === 1) grid.style.opacity = '.4';
+    search('list', params, this.wire, function (b) { return hits(b) + ' items · page ' + n; }).then(function (r) {
+      grid.style.opacity = '';
+      if (r.status !== 200) { grid.innerHTML = errBox(r); return; }
+      var b = r.body, ex = b.extras || {}, total = totalOf(b) || 0;
+      // safety net: a filter IQL cannot parse is dropped silently, never an error
+      var data = (b.data || []).filter(function (it) { return self.excluded.indexOf(it.itemId) < 0; });
+      remember(data);
+      self.pageNo = n;
+      if (n === 1) {
+        self.correlationId = ex.correlationId;
+        self.total = total;
+        self.paintHead(ex);
+        grid.innerHTML = '';
+      }
+      var start = grid.querySelectorAll('.pcard').length;
+      grid.insertAdjacentHTML('beforeend', data.map(function (it, i) { return card(it, start + i); }).join(''));
+      if (!start && !data.length) grid.innerHTML = cards([]);
+      if (n === 1) onCards(grid, click); else Array.prototype.slice.call(grid.querySelectorAll('.pcard'), start).forEach(function (c2) {
+        c2.addEventListener('click', function () { click(c2.getAttribute('data-id'), +c2.getAttribute('data-pos')); });
+      });
+      var shown = grid.querySelectorAll('.pcard').length;
+      el.querySelector('[data-more]').hidden = shown >= total;
+      el.querySelector('[data-plpmeta]').innerHTML = '<b>' + Math.min(shown, total) + '</b> / ' + total +
+        (self.excluded.length ? ' · <span class="excl">' + self.excluded.length + ' above, not repeated</span>' : '');
+    });
+    function click(id, pos) {
+      track('itemSearchClick', { correlationId: self.correlationId, item: id, position: pos, searchType: 'listing' }, self.wire);
+      offerReco(el, id);
+    }
+  };
+  // Title row and subcategory chips. With a subcategory picked the facet only
+  // lists that value, so the chips come from the last unpicked answer.
+  PlpView.prototype.paintHead = function (ex) {
+    var self = this, el = this.el;
+    var ff = (ex.filteredFacets || {}).subcategory || {};
+    if (!state.sub || !this.subs[state.cat]) this.subs[state.cat] = ff;
+    var vals = this.subs[state.cat];
+    // the page's count includes the row above when its items are in scope
+    var shown = this.total + this.excluded.filter(function (id) { return !state.sub || (items[id] || {}).subcategory === state.sub; }).length;
+    el.querySelector('[data-sum]').innerHTML = '<span class="n">' + esc(catLabel(state.cat)) + (state.sub ? ' › ' + esc(state.sub) : '') + '</span>' +
+      '<span class="of">' + shown + ' ' + (state.storeFilter ? esc(t('inCat')) + ' <b>' + esc(storeLabel(state.store)) + '</b>' : esc(t('chain'))) + '</span>';
+    el.querySelector('[data-subk]').textContent = catLabel(state.cat);
+    var subs = el.querySelector('[data-subs]');
+    subs.innerHTML = '<button type="button" class="chip' + (state.sub ? '' : ' is-on') + '" data-sub="">' + esc(t('allSubs')) + '</button>' +
+      Object.keys(vals).sort(function (a, b) { return vals[b] - vals[a]; }).map(function (v) {
+        return '<button type="button" class="chip' + (state.sub === v ? ' is-on' : '') + '" data-sub="' + esc(v) + '">' + esc(v) + '<i>' + vals[v] + '</i></button>';
+      }).join('');
+    subs.querySelectorAll('[data-sub]').forEach(function (ch) {
+      ch.addEventListener('click', function () {
+        var v = ch.getAttribute('data-sub') || null;
+        if (state.sub === v) return;
+        state.sub = v;
+        markStale(PlpView, self);
+        self.run();
+      });
+    });
   };
 
   // ===================================================== stores slide ====
@@ -2410,19 +2932,17 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     if (this.key === key && this.last) this.paint(this.last); else this.run();
   };
   StoresView.prototype.run = function () {
-    var self = this, el = this.el, query = state.query[state.lang] || '';
-    var idx = LANG[state.lang].index, uuid = shopperUuid();
+    var self = this, el = this.el, query = state.query[state.lang] || '', uuid = shopperUuid();
     var btn = el.querySelector('[data-run]'); if (btn) btn.disabled = true;
+    // The wire shows the first store's call in full and the chain-wide one;
+    // the other nineteen differ only in the store id.
     function count(filter, quiet) {
       var params = [['query', query], ['limit', '1'], ['includeMeta', 'true'], ['clientUUID', uuid]];
       if (filter) params.push(['filters', filter]);
-      return call('/search/v2/indices/' + idx + '/query', params, self.wire, {
-        quiet: quiet, summary: function (b) { return (b.meta ? b.meta.totalCount : '?') + ' hits'; },
-      }).then(function (r) { return r.body && r.body.meta ? r.body.meta.totalCount : null; });
+      return search('query', params, self.wire, quiet ? false : function (b) { return hits(b) + ' hits'; })
+        .then(function (r) { return totalOf(r.body); });
     }
-    // The wire shows the first store's call in full and the chain-wide one;
-    // the other nineteen differ only in the store id.
-    var jobs = CFG.stores.map(function (s, i) { return count('availability == "' + s.id + '"', i > 0); });
+    var jobs = CFG.stores.map(function (s, i) { return count(availClause(s.id), i > 0); });
     jobs.push(count('', false));
     Promise.all(jobs).then(function (ns) {
       var res = { chain: ns.pop(), per: {} };
@@ -2434,8 +2954,7 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
     });
   };
   StoresView.prototype.paint = function (res) {
-    var el = this.el, max = Math.max(1, res.chain || 0);
-    var vals = [];
+    var el = this.el, max = Math.max(1, res.chain || 0), vals = [];
     // Largest shelf first, so the chart reads as a ranking.
     var box = el.querySelector('[data-bars]');
     Array.prototype.slice.call(box.children).sort(function (a, b) {
@@ -2449,21 +2968,21 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
       var f = b.querySelector('[data-f]');
       requestAnimationFrame(function () { f.style.width = (n ? Math.max(2, 100 * n / max) : 0) + '%'; });
     });
-    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var dash = function (n) { return n == null ? '–' : n; };
     el.querySelector('[data-total]').innerHTML =
-      '<span>Chain-wide <b>' + (res.chain == null ? '–' : res.chain) + '</b></span>' +
-      '<span>Smallest shelf <b>' + lo + '</b></span><span>Largest shelf <b>' + hi + '</b></span>' +
-      '<span>In ' + esc(storeLabel(state.store)) + ' <b>' + (res.per[state.store] == null ? '–' : res.per[state.store]) + '</b></span>';
+      '<span>Chain-wide <b>' + dash(res.chain) + '</b></span>' +
+      '<span>Smallest shelf <b>' + Math.min.apply(null, vals) + '</b></span><span>Largest shelf <b>' + Math.max.apply(null, vals) + '</b></span>' +
+      '<span>In ' + esc(storeLabel(state.store)) + ' <b>' + dash(res.per[state.store]) + '</b></span>';
   };
 
   // ======================================================= reco slide ====
   function RecoView(el) { this.el = el; this.stale = true; }
   RecoView.prototype.show = function () {
-    var el = this.el, self = this;
+    var el = this.el;
     el.innerHTML = ctxBar() +
       '<div class="reco"><div class="reco-l"><div class="visited" data-pdp></div>' +
       '<div class="reco-wire" data-wire><div class="wire-h"><span>Wire</span><span>tracker key</span></div></div></div>' +
-      '<div class="rails" data-rails>' +
+      '<div class="rails">' +
       CFG.campaigns.map(function (c) {
         return '<div class="rail" data-rail="' + c.key + '"><div class="rail-h"><b>' + esc(c.label) + '</b><span class="rail-ctx" data-ctxname></span><span class="rail-meta" data-meta></span><span class="rail-score" data-score></span></div><div class="rail-items" data-items></div></div>';
       }).join('') + '</div></div>';
@@ -2476,11 +2995,10 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   // The product the shopper is on: a small box, so the wire below gets the
   // column's height. Its name also labels the rails that depend on it.
   RecoView.prototype.paintPdp = function () {
-    var box = this.el.querySelector('[data-pdp]'), el = this.el;
-    var it = items[state.item] || { itemId: state.item };
-    box.innerHTML = '<span class="visited-k">' + esc(t('visited')) + '</span>' +
+    var el = this.el, it = items[state.item] || { itemId: state.item };
+    el.querySelector('[data-pdp]').innerHTML = '<span class="visited-k">' + esc(t('visited')) + '</span>' +
       '<div class="visited-row">' + tile(it) + '<div class="visited-t"><b>' + esc(nameOf(it)) + '</b>' +
-      '<span>' + esc(it.brand || '') + (it.price ? ' · ' + price(it.price) : '') + '</span>' +
+      '<span>' + esc(it.brand || '') + (it.price ? ' · ' + eur(it.price) : '') + '</span>' +
       '<code>' + esc(state.item) + '</code></div></div>';
     CFG.campaigns.forEach(function (c) {
       var n = el.querySelector('[data-rail="' + c.key + '"] [data-ctxname]');
@@ -2495,45 +3013,26 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   RecoView.prototype.run = function () {
     var self = this, el = this.el;
     CFG.campaigns.forEach(function (c, ci) {
-      var rail = el.querySelector('[data-rail="' + c.key + '"]');
-      var params = [['clientUUID', shopperUuid()]];
-      if (c.needsItem) params.push(['itemId', state.item]);
-      params.push(['displayAttribute', 'name_' + state.lang]);
-      params.push(['displayAttribute', 'imageUrl']);
-      if (state.storeFilter) { params.push(['additionalFilters', availClause()]); params.push(['filtersJoiner', 'AND']); }
-      if (ci === 0) params.push(['includeContextItems', 'true']);
-      rail.querySelector('[data-items]').style.opacity = '.4';
-      call('/recommendations/v2/recommend/campaigns/' + c.id, params, self.wire, {
-        summary: function (b, s) { return s === 200 ? (b.data || []).length + ' items' : (b.errorCode || '') + ' ' + (b.message || ''); },
-      }).then(function (r) {
-        var box = rail.querySelector('[data-items]');
+      var rail = el.querySelector('[data-rail="' + c.key + '"]'), box = rail.querySelector('[data-items]');
+      var meta = rail.querySelector('[data-meta]'), sc = rail.querySelector('[data-score]');
+      box.style.opacity = '.4';
+      recommend(c, { filter: state.storeFilter ? availClause() : '', contextItems: ci === 0 }, self.wire).then(function (r) {
         box.style.opacity = '';
-        if (r.status !== 200) {
-          box.innerHTML = '<div class="err-box" style="grid-column:1/-1">' + esc((r.body.errorCode || r.status) + ' · ' + (r.body.message || r.body.error || '')) + '</div>';
-          rail.querySelector('[data-meta]').textContent = '';
-          rail.querySelector('[data-score]').textContent = '';
-          return;
-        }
+        if (r.status !== 200) { box.innerHTML = errBox(r); meta.textContent = ''; sc.textContent = ''; return; }
         var data = r.body.data || [], ex = r.body.extras || {};
         remember(data);
         if (ex.contextItems) { remember(ex.contextItems); self.paintPdp(); }
-        var inN = data.filter(function (it) { return inStore(it); }).length;
-        rail.querySelector('[data-meta]').textContent = r.ms + ' ms';
+        meta.textContent = r.ms + ' ms';
         // n / N in store only for a store-scoped request; unfiltered, the
         // rail is chain-wide and a store score would mean nothing.
-        var sc = rail.querySelector('[data-score]');
+        var inN = data.filter(inStore).length;
         sc.textContent = state.storeFilter ? inN + ' / ' + data.length + ' ' + t('inS') + ' · ' + storeLabel(state.store) : '';
         sc.className = 'rail-score ' + (inN === data.length ? 'all' : 'some');
-        box.innerHTML = data.map(function (it, i) {
-          return '<button type="button" class="pcard is-new" style="animation-delay:' + (i * 30) + 'ms" data-id="' + esc(it.itemId) + '">' + tile(it) + stockBadge(it) +
-            '<span class="pname">' + esc(nameOf(it)) + '</span><span class="pmeta"><span class="pbrand">' + esc(it.brand || '') + '</span><span class="pprice">' + price(it.price) + '</span></span></button>';
-        }).join('') || '<div class="empty">' + esc(t('none')) + '</div>';
+        box.innerHTML = cards(data);
         if (data.length) track('recommendationView', { campaignId: c.id, correlationId: ex.correlationId, items: data.map(function (x) { return x.itemId; }) }, self.wire);
-        box.querySelectorAll('.pcard').forEach(function (n) {
-          n.addEventListener('click', function () {
-            track('recommendationClick', { campaignId: c.id, correlationId: ex.correlationId, item: n.getAttribute('data-id') }, self.wire);
-            self.setItem(n.getAttribute('data-id'));
-          });
+        onCards(box, function (id) {
+          track('recommendationClick', { campaignId: c.id, correlationId: ex.correlationId, item: id }, self.wire);
+          self.setItem(id);
         });
       });
     });
@@ -2555,18 +3054,24 @@ window.__DEMO_CONFIG__ = {"_comment": "Everything the deck needs to know about t
   function refreshSdkViews() { views.forEach(function (v) { if (v instanceof SdkView) v.show(); }); }
 
   // ------------------------------------------------------------- boot --
-  var views = [];
-  var KINDS = { search: SearchView, stores: StoresView, reco: RecoView, sdk: SdkView };
+  var MAKE = {
+    search: function (el) { return new SearchView(el); },
+    plp: function (el) { return new PlpView(el, false); },
+    'plp-special': function (el) { return new PlpView(el, true); },
+    stores: function (el) { return new StoresView(el); },
+    reco: function (el) { return new RecoView(el); },
+    sdk: function (el) { return new SdkView(el); },
+  };
   document.querySelectorAll('[data-live]').forEach(function (el) {
-    var K = KINDS[el.getAttribute('data-live')];
-    if (K) views.push(new K(el));
+    var make = MAKE[el.getAttribute('data-live')];
+    if (make) views.push(make(el));
   });
   // A live slide renders when it comes on, and only re-runs its calls when
   // the shared context changed since it last ran.
   window.addEventListener('deck:slide', function (e) {
     views.forEach(function (v) { if (e.detail.el.contains(v.el) && v.stale) v.show(); });
   });
-  views.forEach(function (v) { if (v instanceof SdkView) v.show(); });
+  refreshSdkViews();
   var active = document.querySelector('.slide.active');
   if (active) views.forEach(function (v) { if (active.contains(v.el)) v.show(); });
   setBadge(badgeState);

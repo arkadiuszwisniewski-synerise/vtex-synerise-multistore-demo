@@ -82,7 +82,7 @@
           <tr><td>Sync complexity</td><td>none</td><td class="is-pick">fan-in, one writer</td><td>low, one per store</td></tr>
           <tr><td>Web recommendations</td><td class="warn">over-fetch + filter</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
           <tr><td>Email</td><td class="bad">API workarounds</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
-          <tr><td>Synerise Search / PLP</td><td class="bad">blind to stock</td><td class="ok is-pick">filter + facets</td><td class="bad">not in Search yet</td></tr>
+          <tr><td>Synerise Search / PLP</td><td class="warn">over-fetch + filter</td><td class="ok is-pick">filter + facets</td><td class="bad">not in Search yet</td></tr>
         </tbody>
       </table>
       <p class="body reveal"><b>Working direction:</b> B now, C as the target once Search reads supplemental catalogs. This deck runs on B.</p>
@@ -95,7 +95,7 @@
 </section>
 
 <!-- 04 — The solution: one item, three kinds of attribute -->
-<section class="slide" data-slide="4" aria-hidden="true" data-section="solution">
+<section class="slide" data-slide="4" aria-hidden="true">
   {{CHROME:02 · The solution}}
   <div class="slide-main">
     <div class="slide-content slide-content-wide text-left">
@@ -145,7 +145,7 @@
         <div class="pipe-arrow"><span></span></div>
         <div class="pipe-node pipe-hl"><span class="eyebrow">Index per language</span><b>havenmart-es</b><span>searches <code>name_es</code>, <code>description_es</code></span></div>
         <div class="pipe-arrow"><span></span></div>
-        <div class="pipe-node pipe-hl"><span class="eyebrow">IQL filter</span><b><code>availability == "ST-ES-MAD-01"</code></b><span>== on an array means &ldquo;contains&rdquo;</span></div>
+        <div class="pipe-node pipe-hl"><span class="eyebrow">IQL filter</span><b><code>availability == "ST-ES-MAD-01"</code></b><span>== on an array matches one whole element</span></div>
         <div class="pipe-arrow"><span></span></div>
         <div class="pipe-node"><span class="eyebrow">Result</span><b>ranked, faceted, in stock</b></div>
       </div>
@@ -214,7 +214,7 @@
     <div class="slide-content slide-content-wide stack-l">
       <div class="stack-s">
         <h2 class="title reveal">One chain, twenty stores, one workspace.</h2>
-        <p class="body-l text-muted reveal">Havenmart: the demo catalog behind the next three slides.</p>
+        <p class="body-l text-muted reveal">Havenmart: the demo catalog behind the next five slides.</p>
       </div>
       <div class="row-stats reveal">
         <div class="stat"><div class="stat-value">1,000</div><div class="stat-label">SKUs, one catalog</div></div>
@@ -245,8 +245,36 @@
   </div>
 </section>
 
-<!-- 10 — LIVE: one query, twenty shelves -->
+<!-- 10 — LIVE: category page (base) -->
 <section class="slide slide-live" data-slide="10" aria-hidden="true">
+  {{CHROME:03 · Live · Category page}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="plp"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">A category page is a search with no query: /list on the same index, the category and the store as filters</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 11 — LIVE: category page, special implementation -->
+<section class="slide slide-live" data-slide="11" aria-hidden="true">
+  {{CHROME:03 · Live · Category page · Special}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="plp-special"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Row 1 is recommendations for this shopper · the listing below leaves those items out (NOT sku IN [...])</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 12 — LIVE: one query, twenty shelves -->
+<section class="slide slide-live" data-slide="12" aria-hidden="true">
   {{CHROME:03 · Live · Availability}}
   <div class="slide-main">
     <div class="slide-content slide-content-wide text-left">
@@ -259,8 +287,8 @@
   </div>
 </section>
 
-<!-- 11 — LIVE: recommendations -->
-<section class="slide slide-live" data-slide="11" aria-hidden="true">
+<!-- 13 — LIVE: recommendations -->
+<section class="slide slide-live" data-slide="13" aria-hidden="true">
   {{CHROME:03 · Live · Recommendations}}
   <div class="slide-main">
     <div class="slide-content slide-content-wide text-left">
@@ -269,6 +297,85 @@
   </div>
   <div class="slide-footer">
     <span class="slide-footer-l">Click any card: it becomes the product on the page</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 14 — Summary: configuration, in Synerise and in every call -->
+<section class="slide" data-slide="14" aria-hidden="true">
+  {{CHROME:04 · Summary}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack">
+      <h2 class="slide-h reveal">Configuration summary.</h2>
+      <div class="grid-2 sum reveal">
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag">In Synerise</span>set once</p>
+          <dl class="cfg">
+            <dt>Item feed</dt><dd>shared attributes, <code>name_{lang}</code>, <code>description_{lang}</code>, <code>availability</code> = array of store ids</dd>
+            <dt>Search index</dt><dd>one per language; searchable <code>name_{lang}</code>, <code>description_{lang}</code>, <code>brand</code></dd>
+            <dt>&nbsp;· filterable</dt><dd><code>availability</code>, <code>category</code>, <code>subcategory</code>, <code>brand</code>, <code>sku</code> <span>(sku: to leave items out)</span></dd>
+            <dt>&nbsp;· facets, sort</dt><dd>facets <code>brand</code>, <code>subcategory</code>, <code>price</code> (range) · sort <code>price</code>, <code>createdAt</code></dd>
+            <dt>&nbsp;· ranking</dt><dd><code>personalized</code>, <code>transactionsPopularity</code>, <code>personalizationWeights</code> for search and listing</dd>
+            <dt>AI engine config</dt><dd><code>availability</code>, <code>category</code>, <code>brand</code> filterable: recommendation filters use only these</dd>
+            <dt>Campaigns</dt><dd>one per model: similar, bought together, personalized. Shared by every language</dd>
+            <dt>Tracking code</dt><dd>tracker key + JS SDK on every page: profile UUID and events</dd>
+          </dl>
+        </div>
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag">In every call</span>front end, tracker key</p>
+          <dl class="cfg">
+            <dt>Every call</dt><dd><code>token={trackerKey}</code> · <code>clientUUID</code> from the SDK (<code>_snrs_uuid</code>)</dd>
+            <dt>Search</dt><dd><code>/indices/{index_lang}/query</code> · <code>filters=availability == "{store}"</code> · <code>facets=brand&amp;facets=price</code> · <code>includeMeta=true</code></dd>
+            <dt>Category page</dt><dd><code>/indices/{index_lang}/list</code> · <code>filters=category == "{cat}" AND availability == "{store}"</code> · <code>context=plp</code> · next page: <code>page</code> + <code>correlationId</code></dd>
+            <dt>&nbsp;· reco row on top</dt><dd>the listing adds <code>AND NOT sku IN [the row's ids]</code></dd>
+            <dt>Recommendations</dt><dd><code>/campaigns/{id}</code> · <code>displayAttribute=name_{lang}</code> · <code>additionalFilters=availability == "{store}"</code> · <code>filtersJoiner=AND</code></dd>
+            <dt>Events</dt><dd><code>item.search.click</code> (correlationId, position, searchType) · <code>recommendation.view</code> / <code>.click</code></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Language picks the index or the display attribute · the store is always a filter</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 15 — Summary: watch out / designed to hold -->
+<section class="slide" data-slide="15" aria-hidden="true">
+  {{CHROME:04 · Summary}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack">
+      <h2 class="slide-h reveal">What to watch, and what already holds.</h2>
+      <div class="grid-2 sum reveal">
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag tag-warn">Watch out</span></p>
+          <ul class="notes notes-warn">
+            <li><b>A bad filter never errors.</b> A typo or a non-filterable attribute drops the filter and returns the whole catalog. Check <code>totalCount</code>.</li>
+            <li><b>Recommendations filter only on AI-engine filterable attributes.</b> Anything else is ignored, with HTTP 200.</li>
+            <li><b>No recommendation matches = HTTP 404 <code>REC-016</code></b>, not an empty list. Treat it as an empty rail.</li>
+            <li><b>Facets: repeat the parameter.</b> <code>…/query?query=milk&amp;facets=brand&amp;facets=price</code>. Written as <code>facets=brand,price</code> it asks for one attribute called &ldquo;brand,price&rdquo; and returns no facet.</li>
+            <li><b>Sorting switches off merchandising.</b> <code>sortBy</code> disables boosts, pins and rules.</li>
+            <li><b>Ranking weights are not on by default.</b> An index without <code>scoring</code> weights ranks in catalog order: no popularity, no personalization. Set <code>personalized</code>, <code>transactionsPopularity</code> and the per-endpoint <code>personalizationWeights</code>.</li>
+          </ul>
+        </div>
+        <div class="sum-col">
+          <p class="sum-h"><span class="dim-tag tag-ok">Designed to hold</span>no need to worry about</p>
+          <ul class="notes notes-ok">
+            <li><b><code>==</code> on an array matches one whole element.</b> <code>store_11</code> never matches <code>store_111</code>; letter case does not matter.</li>
+            <li><b>The store filter reaches the facets.</b> Brands the store does not sell drop out of the brand facet.</li>
+            <li><b>The tracker key in the page is by design.</b> It reads search and recommendations; it cannot read or change configuration.</li>
+            <li><b>One campaign serves every language.</b> <code>displayAttribute</code> returns the shopper&rsquo;s names.</li>
+            <li><b>Leaving the reco row out is server-side.</b> Counts, facets and pages stay right.</li>
+            <li><b>Catalog updates reach the index in minutes</b>, with no rebuild. A config change rebuilds in 6&ndash;10 minutes while the index keeps serving.</li>
+            <li><b>Store-scoped calls are fast.</b> About 100 ms each; twenty in parallel (slide 12) are fine.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Measured live on the demo workspace, October 2026</span>
     <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
   </div>
 </section>

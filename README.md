@@ -27,6 +27,14 @@ edited), drops `parts/slides.html` into it, injects `parts/live.css`,
 Synerise tracking code to `<head>`, and strips the template's PDF export (half
 of this deck is a live application).
 
+| file | what it holds |
+|---|---|
+| `parts/slides.html` | the slides; `{{CHROME:…}}`, `{{N}}`, `{{TOTAL}}` are stamped in by `build.py` |
+| `parts/live.js` | the live slides: shared context, API calls, wire, SDK events |
+| `parts/live.css` | everything added to the template's CSS |
+| `parts/deck.js` | keeps typing out of slide navigation; announces the active slide |
+| `demo.config.json` | workspace ids, stores, categories, personas (see Configuration) |
+
 ## The deck
 
 | # | slide | live? |
@@ -40,8 +48,12 @@ of this deck is a live application).
 | 07 | The storefront calls Synerise directly | SDK status, UUID, event count |
 | 08 | Demo data: 1,000 SKUs, 20 stores, 3 languages | |
 | 09 | **Search**: storefront + wire | **live** |
-| 10 | **One query, twenty shelves**: result count per store | **live** |
-| 11 | **Recommendations**: visited product + 3 rails | **live** |
+| 10 | **Category page**: category tabs, subcategory chips, sort, show more | **live** |
+| 11 | **Category page · special**: a recommendation row, then the listing without those items | **live** |
+| 12 | **One query, twenty shelves**: result count per store | **live** |
+| 13 | **Recommendations**: visited product + 3 rails | **live** |
+| 14 | Configuration summary: in Synerise, in every call | |
+| 15 | What to watch, and what already holds | |
 
 **Shared context bar** on every live slide: store (one flat list of the 20),
 language (EN / ES / FR → one search index each), shopper (this browser's SDK
@@ -57,6 +69,17 @@ one slide and the others follow; the choice is remembered in `localStorage`.
   `limit=1` call with every filter except price (a range facet returns only
   those bounds), and letting go adds `price >= lo AND price <= hi`. Typing
   calls `/autocomplete`.
+- **category page**: `/search/v2/indices/{index_lang}/list` (no query) with
+  `filters=category == "{cat}" AND availability == "{store}"`, plus
+  `subcategory == "…"` when a chip is on, `facets=subcategory`, `context=plp`,
+  `limit=12`. "Show more" asks for the next `page` with the same
+  `correlationId`. Sorting uses `sortBy=price|createdAt` (which switches off
+  boosts and rules, as in any search).
+- **category page · special**: first the personalized campaign with
+  `additionalFilters=category == "{cat}" AND availability == "{store}"`, of
+  which the row shows four; then the same listing with
+  `AND NOT sku IN ["…", …]` appended, so the row's items are not repeated
+  below.
 - **stores**: the same query for each of the 20 stores plus chain-wide,
   `limit=1`, read from `meta.totalCount`.
 - **recommendations**: `/recommendations/v2/recommend/campaigns/{id}` with
@@ -72,8 +95,10 @@ one slide and the others follow; the choice is remembered in `localStorage`.
 (rendered in code for the fictional brands), with a coloured tile behind it as
 the fallback.
 
-**SDK events**: a product click on search sends `item.search.click`; each rail
-sends `recommendation.view`; a card click sends `recommendation.click`. They
+**SDK events**: a product click on search or a category page sends
+`item.search.click` (`searchType` full-text-search, autocomplete or listing);
+each recommendation rail or row sends `recommendation.view`, a card click
+`recommendation.click`. They
 are sent only when the shopper is "this browser": with a persona selected they
 would land on the wrong profile, and the wire says "skipped".
 
@@ -84,15 +109,25 @@ network drops, the last real answer is replayed and the badge turns yellow.
 
 Everything workspace-specific is in `demo.config.json`: the tracker key (the
 public key from the tracking code, meant to sit in a web page), the three
-index ids, the three recommendation campaign ids, the stores and the persona
-UUIDs. To point the deck at another workspace, change those and rebuild.
+index ids, the three recommendation campaign ids, the stores, the categories
+(with their names per language), the persona UUIDs and the starting store,
+language, product and category. To point the deck at another workspace,
+change those and rebuild.
 
 `SR.init` gets `disableDynamicContent: true`, so the workspace's own Dynamic
 Content layers don't pop up over the slides.
 
+The workspace has to provide (slide 14 has the full list):
+
+- one search index per language with `availability`, `category`,
+  `subcategory`, `brand` and `sku` filterable, and `scoring` weights
+  (`personalized`, `transactionsPopularity`, `personalizationWeights`). Without
+  the weights every shopper gets catalog order; without `sku` the special
+  category page cannot leave the row's items out.
+- `availability`, `category` and `brand` filterable in the AI engine
+  configuration. Recommendation filters on anything else are ignored, with
+  HTTP 200.
+
 ## Known limits (2026-10-06)
 
-1. Recommendation filters apply only to attributes marked filterable in the AI
-   engine configuration; until `availability` is one, the store clause on the
-   recommendation calls is ignored (the search side filters correctly).
-2. The similar-items model on this demo data returns weakly related products.
+- The similar-items model on this demo data returns weakly related products.
