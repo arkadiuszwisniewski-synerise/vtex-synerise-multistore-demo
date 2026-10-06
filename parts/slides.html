@@ -1,0 +1,274 @@
+<!-- ============================================================
+     The deck. build.py stamps in the chrome (the CHROME placeholder with a section
+     label → logo, breadcrumb, label top-right) and the footer numbering
+     (the N and TOTAL placeholders), so slides can be added or reordered
+     without renumbering by hand.
+
+     Live slides carry an empty <div class="live" data-live="…">; live.js
+     renders into it.
+     ============================================================ -->
+
+<!-- 01 — Title -->
+<section class="slide" data-slide="1" aria-hidden="false">
+  {{CHROME:VTEX × Synerise}}
+  <div class="slide-main">
+    <div class="slide-content stack">
+      <p class="eyebrow reveal">VTEX × Synerise · feed architecture · live run</p>
+      <h1 class="display reveal">One catalog.<br>Every store, every language.</h1>
+      <p class="body-l text-muted reveal" style="max-width: 900px; margin-left: auto; margin-right: auto;">
+        How brand-country, language and per-store availability land in one Synerise item feed.
+        Then search and recommendations, live, from the browser.
+      </p>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">October 2026</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 02 — The problem: three dimensions in every request -->
+<section class="slide" data-slide="2" aria-hidden="true">
+  {{CHROME:01 · The problem}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack-l">
+      <div class="stack-s">
+        <h2 class="title reveal">Every request carries three answers.</h2>
+        <p class="body-l text-muted reveal">Which country, which language, which store. VTEX models each one differently.</p>
+      </div>
+      <div class="grid-3 dims reveal">
+        <div class="card dim">
+          <span class="dim-tag">Brand-country</span>
+          <p class="dim-vtex">VTEX · trade policy <em>BRAND-ES, BRAND-PT</em></p>
+          <p class="dim-arrow" aria-hidden="true">&darr;</p>
+          <p class="dim-syn"><b>One Synerise workspace</b><span>1:1, configured separately</span></p>
+        </div>
+        <div class="card dim">
+          <span class="dim-tag">Language</span>
+          <p class="dim-vtex">VTEX · binding / locale <em>es-ES, en-ES</em></p>
+          <p class="dim-arrow" aria-hidden="true">&darr;</p>
+          <p class="dim-syn"><b>Suffixed attributes</b><span><code>name_es</code>, <code>name_en</code> on the same item</span></p>
+        </div>
+        <div class="card dim">
+          <span class="dim-tag">Store</span>
+          <p class="dim-vtex">VTEX · seller per store <em>white label seller</em></p>
+          <p class="dim-arrow" aria-hidden="true">&darr;</p>
+          <p class="dim-syn"><b>Availability on the item</b><span>an array of store ids</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Same SKUs, same assortment, same prices within a trade policy</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 03 — The bottleneck: availability, options A / B / C -->
+<section class="slide" data-slide="3" aria-hidden="true">
+  {{CHROME:01 · The problem}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack">
+      <div class="stack-s">
+        <h2 class="slide-h reveal">Availability lives in N store accounts.<br>Search and recommendations need it on the item.</h2>
+      </div>
+      <table class="opts reveal">
+        <thead>
+          <tr><th></th><th>A · resolve on the front end</th><th class="is-pick">B · array on the item</th><th>C · supplemental catalog</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Available today</td><td class="ok">yes</td><td class="ok is-pick">yes</td><td class="warn">no Search yet</td></tr>
+          <tr><td>Source of truth</td><td>VTEX</td><td class="is-pick">copy in Synerise</td><td>copy in Synerise</td></tr>
+          <tr><td>Sync complexity</td><td>none</td><td class="is-pick">fan-in, one writer</td><td>low, one per store</td></tr>
+          <tr><td>Web recommendations</td><td class="warn">over-fetch + filter</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
+          <tr><td>Email</td><td class="bad">API workarounds</td><td class="ok is-pick">native</td><td class="ok">native</td></tr>
+          <tr><td>Synerise Search / PLP</td><td class="bad">blind to stock</td><td class="ok is-pick">filter + facets</td><td class="bad">not in Search yet</td></tr>
+        </tbody>
+      </table>
+      <p class="body reveal"><b>Working direction:</b> B now, C as the target once Search reads supplemental catalogs. This deck runs on B.</p>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Attribute sync from VTEX is taken as given here: the deck is about using it</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 04 — The solution: one item, three kinds of attribute -->
+<section class="slide" data-slide="4" aria-hidden="true" data-section="solution">
+  {{CHROME:02 · The solution}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="grid-2 item-def">
+        <div class="stack">
+          <h2 class="title reveal">One item.<br>Three kinds of attribute.</h2>
+          <div class="legend reveal">
+            <div class="legend-row k-global"><b>Shared</b><span>price, brand, EAN, images. Written by one primary integration.</span></div>
+            <div class="legend-row k-lang"><b>Translated</b><span><code>name_{lang}</code>, <code>description_{lang}</code>, category, URL.</span></div>
+            <div class="legend-row k-avail"><b>Availability</b><span>The stores that have it. A list of positive ids.</span></div>
+          </div>
+        </div>
+        <pre class="json reveal" aria-label="Example item from the demo catalog"><code>{
+  <span class="k-global">"itemId": "HM-GRO-0116",</span>
+  <span class="k-global">"brand": "Havenmart",</span>
+  <span class="k-global">"price": "4.19",</span>
+  <span class="k-global">"unit": "2 x 1L",</span>
+  <span class="k-lang">"name_en": "Havenmart Whole Milk 2 x 1L",</span>
+  <span class="k-lang">"name_es": "Leche entera Havenmart 2 x 1 L",</span>
+  <span class="k-lang">"name_fr": "Lait entier Havenmart 2 x 1 L",</span>
+  <span class="k-avail">"availability": [
+    "ST-ES-MAD-01", "ST-ES-MAD-02", "ST-ES-BCN-01",
+    "ST-ES-VLC-01", "ST-ES-SVQ-01", "ST-ES-ZAZ-01",
+    "ST-IT-MIL-01", "ST-IT-ROM-01", "ST-FR-LYS-01",
+    "ST-PT-LIS-01", "ST-DE-HAM-01"
+  ]</span>
+}</code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">A real row of the demo catalog · not in Köln, not in Napoli</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 05 — Search: language picks the index, store becomes a filter -->
+<section class="slide" data-slide="5" aria-hidden="true">
+  {{CHROME:02 · The solution · Search}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack-l">
+      <div class="stack-s">
+        <h2 class="title reveal">Language picks the index.<br>Store becomes a filter.</h2>
+      </div>
+      <div class="pipe reveal">
+        <div class="pipe-node"><span class="eyebrow">Shopper context</span><b>lang = es</b><b>store = ST-ES-MAD-01</b></div>
+        <div class="pipe-arrow"><span></span></div>
+        <div class="pipe-node pipe-hl"><span class="eyebrow">Index per language</span><b>havenmart-es</b><span>searches <code>name_es</code>, <code>description_es</code></span></div>
+        <div class="pipe-arrow"><span></span></div>
+        <div class="pipe-node pipe-hl"><span class="eyebrow">IQL filter</span><b><code>availability == "ST-ES-MAD-01"</code></b><span>== on an array means &ldquo;contains&rdquo;</span></div>
+        <div class="pipe-arrow"><span></span></div>
+        <div class="pipe-node"><span class="eyebrow">Result</span><b>ranked, faceted, in stock</b></div>
+      </div>
+      <pre class="url reveal"><code>GET /search/v2/indices/<mark>{index_es}</mark>/query?query=leche&amp;clientUUID={uuid}
+    &amp;filters=<mark>availability == "ST-ES-MAD-01"</mark>&amp;facets=brand&amp;token=<mark>{trackerKey}</mark></code></pre>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">10 search indices per workspace · a brand-country with two languages uses two</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 06 — Recommendations: one campaign per model -->
+<section class="slide" data-slide="6" aria-hidden="true">
+  {{CHROME:02 · The solution · Recommendations}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left stack-l">
+      <div class="stack-s">
+        <h2 class="title reveal">One campaign per model.<br>Language and store travel with the request.</h2>
+      </div>
+      <div class="grid-3 reveal">
+        <div class="card"><span class="dim-tag">Model</span><p class="body"><b>Campaign id</b> &mdash; similar items, bought together, personalized. One each, for every language.</p></div>
+        <div class="card"><span class="dim-tag">Language</span><p class="body"><b><code>displayAttribute=name_es</code></b> &mdash; the response carries the shopper&rsquo;s language.</p></div>
+        <div class="card"><span class="dim-tag">Store</span><p class="body"><b><code>additionalFilters</code></b> &mdash; the same availability clause, joined with AND to the campaign&rsquo;s own filters.</p></div>
+      </div>
+      <pre class="url reveal"><code>GET /recommendations/v2/recommend/campaigns/<mark>{campaignId}</mark>?clientUUID={uuid}&amp;itemId=HM-GRO-0116
+    &amp;displayAttribute=<mark>name_es</mark>&amp;additionalFilters=<mark>availability == "ST-ES-MAD-01"</mark>&amp;filtersJoiner=AND&amp;token={trackerKey}</code></pre>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">One campaign per model, not per language · displayAttribute does the translation</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 07 — The front end: SDK in the page, no backend in the path -->
+<section class="slide" data-slide="7" aria-hidden="true">
+  {{CHROME:02 · The solution · Front end}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="grid-2 fe">
+        <div class="stack">
+          <h2 class="title reveal">The storefront calls Synerise directly.</h2>
+          <ul class="ticks reveal">
+            <li><b>Tracking code in the page.</b> The SDK gives every visitor a profile UUID.</li>
+            <li><b>Tracker key on every call.</b> Public by design: it reads search and recommendations, never configuration.</li>
+            <li><b>Events close the loop.</b> Search clicks and recommendation views train ranking.</li>
+            <li><b>No API key in the browser.</b> Index and campaign setup stays server-side.</li>
+          </ul>
+        </div>
+        <div class="live reveal" data-live="sdk"></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">This deck is the storefront: the same tracking code runs in it</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 08 — Demo data -->
+<section class="slide" data-slide="8" aria-hidden="true">
+  {{CHROME:03 · Live}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide stack-l">
+      <div class="stack-s">
+        <h2 class="title reveal">One chain, twenty stores, one workspace.</h2>
+        <p class="body-l text-muted reveal">Havenmart: the demo catalog behind the next three slides.</p>
+      </div>
+      <div class="row-stats reveal">
+        <div class="stat"><div class="stat-value">1,000</div><div class="stat-label">SKUs, one catalog</div></div>
+        <div class="stat"><div class="stat-value">20</div><div class="stat-label">stores, one availability array</div></div>
+        <div class="stat"><div class="stat-value">294&ndash;995</div><div class="stat-label">SKUs ranged per store</div></div>
+        <div class="stat"><div class="stat-value">3</div><div class="stat-label">languages · 3 indices</div></div>
+        <div class="stat"><div class="stat-value">3</div><div class="stat-label">recommendation campaigns</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Fictional retailer, real Synerise workspace · every call that follows is live</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 09 — LIVE: search -->
+<section class="slide slide-live" data-slide="9" aria-hidden="true">
+  {{CHROME:03 · Live · Search}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="search"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Change the store or the language: same query, another shelf</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 10 — LIVE: one query, twenty shelves -->
+<section class="slide slide-live" data-slide="10" aria-hidden="true">
+  {{CHROME:03 · Live · Availability}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="stores"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Twenty calls in parallel, one per store · click a bar to shop there</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>
+
+<!-- 11 — LIVE: recommendations -->
+<section class="slide slide-live" data-slide="11" aria-hidden="true">
+  {{CHROME:03 · Live · Recommendations}}
+  <div class="slide-main">
+    <div class="slide-content slide-content-wide text-left">
+      <div class="live" data-live="reco"></div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="slide-footer-l">Click any card: it becomes the product on the page</span>
+    <span class="slide-footer-r">{{N}} / {{TOTAL}}</span>
+  </div>
+</section>

@@ -1,0 +1,263 @@
+{
+ "_comment": "Everything the deck needs to know about the workspace. The tracker key is the public front-end key from the tracking code: it is meant to sit in a web page. Never put a workspace API key here.",
+ "trackerKey": "b8e6187d-6cf5-4fdf-828e-4baaa3772f96",
+ "apiBase": "https://api.synerise.com",
+ "sdkUrl": "//web.snrbox.com/synerise-javascript-sdk.min.js",
+ "app": {
+  "baseUrl": "https://app.synerise.com"
+ },
+ "languages": [
+  {
+   "code": "en",
+   "label": "English",
+   "index": "bee3131867cc77a2942e85b44b60496d1790767310",
+   "query": "coffee"
+  },
+  {
+   "code": "es",
+   "label": "Español",
+   "index": "b99326a0847d4459a093bef6be2b72a01790767311",
+   "query": "café"
+  },
+  {
+   "code": "fr",
+   "label": "Français",
+   "index": "e0366b8640ba163cdbe31bff84209e071790767311",
+   "query": "café"
+  }
+ ],
+ "campaigns": [
+  {
+   "key": "similar",
+   "id": "PNRRbTrHVXip",
+   "label": "Similar items",
+   "needsItem": true
+  },
+  {
+   "key": "cross-sell",
+   "id": "aFw56uwMvbmI",
+   "label": "Bought together",
+   "needsItem": true
+  },
+  {
+   "key": "personalized",
+   "id": "We1ZZzRzbkh7",
+   "label": "For this shopper",
+   "needsItem": false
+  }
+ ],
+ "stores": [
+  {
+   "id": "ST-ES-MAD-01",
+   "name": "Madrid Chamartin",
+   "city": "Madrid",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-MAD-02",
+   "name": "Madrid Carabanchel",
+   "city": "Madrid",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-BCN-01",
+   "name": "Barcelona Diagonal Mar",
+   "city": "Barcelona",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-BCN-02",
+   "name": "Barcelona Sants",
+   "city": "Barcelona",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "City",
+   "skus": 324
+  },
+  {
+   "id": "ST-ES-VLC-01",
+   "name": "Valencia Campanar",
+   "city": "Valencia",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-SVQ-01",
+   "name": "Sevilla Nervion",
+   "city": "Sevilla",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-AGP-01",
+   "name": "Malaga Teatinos",
+   "city": "Málaga",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Supermarket",
+   "skus": 631
+  },
+  {
+   "id": "ST-ES-ZAZ-01",
+   "name": "Zaragoza Actur",
+   "city": "Zaragoza",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Hypermarket",
+   "skus": 995
+  },
+  {
+   "id": "ST-ES-BIO-01",
+   "name": "Bilbao Deusto",
+   "city": "Bilbao",
+   "country": "Spain",
+   "cc": "ES",
+   "format": "Supermarket",
+   "skus": 627
+  },
+  {
+   "id": "ST-IT-MIL-01",
+   "name": "Milano Certosa",
+   "city": "Milano",
+   "country": "Italy",
+   "cc": "IT",
+   "format": "Hypermarket",
+   "skus": 971
+  },
+  {
+   "id": "ST-IT-ROM-01",
+   "name": "Roma Portuense",
+   "city": "Roma",
+   "country": "Italy",
+   "cc": "IT",
+   "format": "Hypermarket",
+   "skus": 971
+  },
+  {
+   "id": "ST-IT-TRN-01",
+   "name": "Torino Lingotto",
+   "city": "Torino",
+   "country": "Italy",
+   "cc": "IT",
+   "format": "Supermarket",
+   "skus": 603
+  },
+  {
+   "id": "ST-IT-NAP-01",
+   "name": "Napoli Fuorigrotta",
+   "city": "Napoli",
+   "country": "Italy",
+   "cc": "IT",
+   "format": "City",
+   "skus": 312
+  },
+  {
+   "id": "ST-FR-LYS-01",
+   "name": "Lyon Part-Dieu",
+   "city": "Lyon",
+   "country": "France",
+   "cc": "FR",
+   "format": "Hypermarket",
+   "skus": 935
+  },
+  {
+   "id": "ST-FR-TLS-01",
+   "name": "Toulouse Purpan",
+   "city": "Toulouse",
+   "country": "France",
+   "cc": "FR",
+   "format": "Supermarket",
+   "skus": 591
+  },
+  {
+   "id": "ST-PT-LIS-01",
+   "name": "Lisboa Alvalade",
+   "city": "Lisboa",
+   "country": "Portugal",
+   "cc": "PT",
+   "format": "Hypermarket",
+   "skus": 928
+  },
+  {
+   "id": "ST-PT-OPO-01",
+   "name": "Porto Boavista",
+   "city": "Porto",
+   "country": "Portugal",
+   "cc": "PT",
+   "format": "Supermarket",
+   "skus": 585
+  },
+  {
+   "id": "ST-PT-BRG-01",
+   "name": "Braga Maximinos",
+   "city": "Braga",
+   "country": "Portugal",
+   "cc": "PT",
+   "format": "Supermarket",
+   "skus": 590
+  },
+  {
+   "id": "ST-DE-HAM-01",
+   "name": "Hamburg Barmbek",
+   "city": "Hamburg",
+   "country": "Germany",
+   "cc": "DE",
+   "format": "Hypermarket",
+   "skus": 875
+  },
+  {
+   "id": "ST-DE-CGN-01",
+   "name": "Koln Ehrenfeld",
+   "city": "Köln",
+   "country": "Germany",
+   "cc": "DE",
+   "format": "City",
+   "skus": 294
+  }
+ ],
+ "personas": [
+  {
+   "uuid": "b2a45f87-ac05-4e2a-bb03-c893c217b1d2",
+   "name": "Alexis Lee",
+   "note": "Lisboa · 73% beverages"
+  },
+  {
+   "uuid": "1ae826f6-d91b-443f-a3cb-d462a361c05a",
+   "name": "Christine Burke",
+   "note": "Toulouse · 55% beverages"
+  },
+  {
+   "uuid": "e1e3ff05-0a78-4c21-9ca3-368459c9bf28",
+   "name": "Daniel Young",
+   "note": "Barcelona · 81% health & beauty"
+  },
+  {
+   "uuid": "36046d50-48bf-41f9-8984-de0d051a4b63",
+   "name": "Jamie Dunlap",
+   "note": "Sevilla · 74% household"
+  },
+  {
+   "uuid": "701f6aaa-cb8e-4f5d-b974-a22fac1d1055",
+   "name": "William Butler",
+   "note": "Malaga · 81% beverages"
+  }
+ ],
+ "defaults": {
+  "store": "ST-ES-BCN-02",
+  "lang": "es",
+  "item": "HM-GRO-0116"
+ }
+}
